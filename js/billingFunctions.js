@@ -152,7 +152,7 @@
             if( json_resp.files_url && json_resp.bill_system_id ){
                 $( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
                 $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
-                $( '#files_download' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+                $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
                 $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
                 if( json_resp.status == 200 ){
                     $( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion

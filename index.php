@@ -143,8 +143,8 @@
                         class="btn btn-success form-control"
                         id="files_download"
                         onclick="downloadFiles();"
-                        url="http://localhost/clucesFact2023/c2lzdGVtYXM=/casaLucesBazar/code/ajax/fElectronica/zip.php?id_venta=64277"
-                    >
+                        
+                    ><!-- url="http://localhost/clucesFact2023/c2lzdGVtYXM=/casaLucesBazar/code/ajax/fElectronica/zip.php?id_venta=64277"-->
                         <i class="icon-download-cloud">Descargar archivos</i>
                     </button>
                 </div>
@@ -155,8 +155,7 @@
                         class="btn btn-success form-control"
                         id="send_email_btn"
                         onclick="sendEmail();"
-                        sale_folio="24MAT6"
-                    >
+                    ><!--sale_folio=""-->
                         <i class="icon-email">Enviar por Correo</i>
                     </button>
                 </div>
