@@ -147,6 +147,7 @@
             var sale = global_sale.sale.folio;
             var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=` + cfdi_use;
             var resp = ajaxR( url );
+//alert( resp );
             var json_resp = JSON.parse(resp);
             var content = `<h2>${json_resp.message}</h2>`;
             if( json_resp.files_url && json_resp.bill_system_id ){
