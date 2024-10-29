@@ -1,3 +1,5 @@
 {
-    "billing_api" : "http://192.168.1.223:8888/adminFacturacion/rest"
+    "billing_api" : "http://192.168.1.223:8888/adminFacturacion",
+    "general_api" : "https://56.pruebascdll2024.space/desarrollo/desarrollo_general_linea_2024",
+    "admin_fact_dir" : "adminFacturacion"
 }

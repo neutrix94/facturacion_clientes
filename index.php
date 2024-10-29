@@ -58,10 +58,18 @@
                         <i class="icon-spin3"></i>
                     </button>
                 </div>
-                <div class="text-info">
+                <div>
+                    <button
+                        class="btn btn-info form-control"
+                        onclick="location.href='php/clientes/index.php?'"
+                    >
+                        <i class="icon-user">Dar de alta nuevo cliente</i>
+                    </button>
+                </div>
+                <!--div class="text-info">
                    <p>FUNK671228PH6</p> 
                    <p>TPM140304253</p>
-                </div>
+                </div-->
                 <br>
                 <div class="hidden" id="contacts_container">
                     <table class="table table-striped table-bordered">

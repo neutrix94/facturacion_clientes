@@ -1,6 +1,12 @@
 <?php
-	include( '../../../../../conect.php' );
-	include( '../../../../../conexionMysqli.php' );
+	error_reporting(0);
+	$data = file_get_contents( "../../../config/apis.json");
+	$config = json_decode($data, true);
+	$admin_fact_dir = $config['admin_fact_dir'];
+	include( "../../../../{$admin_fact_dir}/include/db.php" );
+	$db = new db();	
+	$link = $db->conectDB();
+	//include( '../../../../../conexionMysqli.php' );
 	if( isset( $_GET['costumer_fl'] ) || isset( $_POST['costumer_fl'] ) ){
 		$BC = new BillCostumer( $link );
 		$action = ( isset( $_GET['costumer_fl'] ) ? $_GET['costumer_fl'] : $_POST['costumer_fl'] );
@@ -39,6 +45,7 @@
 				$fiscal_regime = $_POST['fiscal_regime'];
 				$fiscal_cedule = $_POST['fiscal_cedule'];
 				$costumer_id = $_POST['costumer_id'];
+				//die( "regimen : {$fiscal_regime}" );
 				echo $BC->saveCostumer( $rfc, $name, $telephone, $email, $person_type, $street_name, 
 					$internal_number, $external_number, $cologne, $municipality, $postal_code, $location, 
 					$reference, $country, $state, $token, $costumer_name, $cellphone, $fiscal_regime, 
@@ -75,7 +82,7 @@
 			//}
 			$stm = $this->link->query( $sql ) or die( "Error al consultar los cfdis : {$this->link->error}" );
 			$resp = "<option value=\"0\">-- Seleccionar --</option>";
-			while( $row = $stm->fetch_assoc() ){
+			while( $row = $stm->fetch() ){
 				$resp .= "<option value=\"{$row['clue']}\"";
 				$resp .= ( $cfdi != null && $cfdi == $row['clue'] ? ' selected' : '' );
 				$resp .= ">{$row['name']}</option>";
@@ -91,61 +98,54 @@
 			$sql = "SELECT caracter, codigo_reemplazo FROM vf_caracteres_especiales WHERE id_caracter_especial > 1";
 			$stm = $this->link->query( $sql ) or die( "Error al consultar los caracteres especiales : {$this->link->error}" );
 			$replace = array();
-			while ( $row = $stm->fetch_assoc() ) {
+			while ( $row = $stm->fetch() ) {
 				$replace[] = $row;
 			}
-		//verifica datos del cliente por medio de API
-			$local_path = "";
-			$archivo_path = "../../../../../conexion_inicial.txt";
-			if(file_exists($archivo_path) ){
-				$file = fopen($archivo_path,"r");
-				$line=fgets($file);
-				fclose($file);
-				$config=explode("<>",$line);
-				$tmp=explode("~",$config[0]);
-				$local_path = "localhost/" . base64_decode( $tmp[1] ) . "/rest/v1/facturaReceptor";
-			}else{
-				die("No hay archivo de configuración!!!");
-			}
-//echo $name;
-//die( 'here : ' . $name );
+
+			$data = file_get_contents( "../../../config/apis.json");
+			$config = json_decode($data, true);
+			$general_api_url = $config['general_api'];
+			$billing_api_url = $config['billing_api'];
+		//valida 
+			$local_path = "{$general_api_url}/rest/v1/facturaReceptor";
 			$name = str_replace('"', '&quot;', $name );
 			
-			foreach ($replace as $key => $rep) {
+			/*foreach ($replace as $key => $rep) {
 			//	$name = str_replace( ''.$rep['caracter'].'', "{$rep['codigo_reemplazo']}", $name );//nombre razon social
 				//$name = str_replace( "&QUOT;", "&quot;", $name );//nombre razon social
 				//$row[23] = str_replace( "{$rep['codigo_reemplazo']}", "{$rep['caracter']}", $row[23] );//calle
 				//$row[26] = str_replace( "{$rep['codigo_reemplazo']}", "{$rep['caracter']}", $row[26] );//colonia
 				//$row[27] = str_replace( "{$rep['codigo_reemplazo']}", "{$rep['caracter']}", $row[27] );//del_municipio
 			}
-			//die( "nombre : " . $name );
+			//die( "nombre : " . $name );*/
 
 			$data = array( "rfc"=>$rfc, "nombre"=>$name, "usoCFDI"=>"G03", "domicilioFiscal"=>$postal_code, 
 				"regimenFiscal"=>$fiscal_regime );//var_dump( $data );die('');
 			$sql = "select token from api_token where id_user=0 and expired_in > now() limit 1;";
 			$stm = $this->link->query($sql) or die( "Error al consultar el token : {$this->link->error}" );
-			$respuesta = $stm->fetch_assoc();
+			$respuesta = $stm->fetch();
 			$token = $respuesta['token'];
 
 			$post_data = json_encode( $data );
-			//die( $post_data );
+			//die( $post_data . "{$local_path}" );
 			$crl = curl_init( $local_path );
 			curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($crl, CURLINFO_HEADER_OUT, true);
 			curl_setopt($crl, CURLOPT_POST, true);
 			curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
 			//curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-		    curl_setopt($ch, CURLOPT_TIMEOUT, 60000);
+		    curl_setopt($crl, CURLOPT_TIMEOUT, 60000);
 			curl_setopt($crl, CURLOPT_HTTPHEADER, array(
 			  'Content-Type: application/json',
 			  'token: ' . $token)
 			);
 			$resp = curl_exec($crl);//envia peticion
 			curl_close($crl);
-			//die( $resp );
+			//die( "HERE : " . $resp . " | {$post_data}" );
 			$result = json_decode( $resp );
 			//var_dump($result);
 			if( $result->status != 200 ){
+//die( "here 1" );
 			//casos de respuesta
 				if( isset( $result->result ) ){
 					//var_dump( $result );
@@ -179,7 +179,6 @@
 					//var_dump( $result );
 					die( "<div class=\"row\">
 						<h2 class=\"text-center text-danger fs-1\">{$result->result}</h2>
-						<h2 class=\"text-center text-primary\">Verifica y vuelve a intenar.</h2>
 						<button
 							type=\"button\"
 							onclick=\"close_emergent();\"
@@ -196,36 +195,46 @@
 					//return 
 				//die( $result->result );
 			}else{
-				//var_dump( $result );
+//				var_dump( $result );
 			}
-			$this->link->autocommit( false );
-		//inserta el registro del cliente
-			$sql = "INSERT INTO vf_clientes_razones_sociales_tmp  
-						SET rfc = '{$rfc}', 
-						razon_social = '{$name}', 
-						id_tipo_persona = '{$person_type}', 
-						entrega_cedula_fiscal = IF( '{$fiscal_cedule}' = '', 0, 1 ), 
-						url_cedula_fiscal = '{$fiscal_cedule}',
-						calle = '{$street_name}',
-						no_int = '{$internal_number}',
-						no_ext = '{$external_number}',
-						colonia = '{$cologne}',
-						del_municipio = '{$municipality}',
-						cp = '{$postal_code}',
-						estado = '{$state}',
-						pais = '{$country}',
-						regimen_fiscal = '{$fiscal_regime}',
-						id_cliente_facturacion = IF( '$costumer_id' = '' OR '$costumer_id' = '0', '0', '{$costumer_id}' )";
-			$stm = $this->link->query( $sql ) or die( "Error al insertar cliente : {$this->link->error}" );
-			$customer_id = $this->link->insert_id;
-		//inserta el detalle del cliente
+			$costumer_json = array( 
+				/*"id_cliente_facturacion_tmp"=>"{$}",*/
+				"rfc"=>"{$rfc}",
+				"razon_social"=>"{$name}",
+				"id_tipo_persona"=>"{$person_type}",
+				"entrega_cedula_fiscal"=>( $fiscal_cedule == '' ? 0 : 1 ),
+				"url_cedula_fiscal"=> "{$fiscal_cedule}",
+				"calle"=>"{$street_name}",
+				"no_int"=>"{$internal_number}",
+				"no_ext"=>"{$external_number}",
+				"colonia"=>"{$cologne}",
+				"del_municipio"=>"{$municipality}",
+				"cp"=>"{$postal_code}",
+				"estado"=>"{$state}",
+				"pais"=>"{$country}",
+				"regimen_fiscal"=>"{$fiscal_regime}",
+				"productos_especificos"=>"0",
+				"id_cliente_facturacion"=>( $costumer_id == '' || $costumer_id == 0 ? 0 : $costumer_id ) 
+			);
+			$costumer_json['detail'] = array();
 			$contacts = explode( "|~|", $costumer_contacts );
-			//$contacts_to_insert = array();
 			foreach ($contacts as $key => $value) {
 				if( $value != '' ){
 					$contact = explode("~", $value);
-					$sql = "INSERT INTO vf_clientes_contacto_tmp
-								SET id_cliente_facturacion_tmp = '{$customer_id}',
+					$contact_tmp = array(
+						"id_cliente_contacto_tmp"=>NULL,
+						"id_cliente_facturacion_tmp"=>NULL,
+						"nombre"=>"{$contact[0]}",
+						"telefono"=>"{$contact[1]}",
+						"celular"=>"{$contact[2]}",
+						"correo"=>"{$contact[3]}",
+						"uso_cfdi"=>"{$contact[4]}",
+						"id_cliente_contacto"=>( $contact[6] == '' || $contact[6] == 0 ? 0 : $contact[6] ),
+						"id_cliente_facturacion"=>( $costumer_id == '' || $costumer_id == 0 ? 0 : $costumer_id )
+					);
+					array_push( $costumer_json['detail'], $contact_tmp );
+					/*$sql = "INSERT INTO vf_clientes_contacto_tmp
+								SET id_cliente_facturacion_tmp = '{$customer_tmp_id}',
 								nombre = '{$contact[0]}',
 								telefono = '{$contact[1]}',
 								celular = '{$contact[2]}',
@@ -233,15 +242,44 @@
 								uso_cfdi = '{$contact[4]}',
 								fecha_alta = NOW(),
 								id_cliente_facturacion = IF( '$costumer_id' = '' OR '$costumer_id' = '0', '0', '{$costumer_id}' ),
-								id_cliente_contacto = IF( '{$contact[6]}' = '' OR '{$contact[6]}' = '0', '0', '{$contact[6]}' )";
+								id_cliente_contacto = IF( '{$contact[6]}' = '' OR '{$contact[6]}' = '0', '0', '{$contact[6]}' )";*/
 								//die( $sql );
 					$stm_contact = $this->link->query( $sql ) or die( "Error al insertar contacto(s) del cliente : {$this->link->error}" );
 				}
 			}
-			$this->link->autocommit( true );
+			//echo json_encode( array( "rows"=>$costumer_json ) ); //return '';
+			$data = file_get_contents( "../../../config/apis.json");
+			$config = json_decode($data, true);
+			$api_url = $config['billing_api'];
 		//consume el api para subir/descargar clientes a linea
-			$local_path = "";
-			$archivo_path = "../../../../../conexion_inicial.txt";
+			$local_path = "{$billing_api_url}/rest/inserta_cliente_directo";
+			//die($local_path);
+		//genera el json para insertar directamente
+			$costumers = array();
+			$costumers[0] = $costumer_json;
+			
+		//prepara el cliente para enviarlo
+		/*$sql = "SELECT 
+					id_cliente_facturacion_tmp,
+					rfc,
+					razon_social,
+					id_tipo_persona,
+					entrega_cedula_fiscal,
+					url_cedula_fiscal,
+					calle,
+					no_int,
+					no_ext,
+					colonia,
+					del_municipio,
+					cp,
+					estado,
+					pais,
+					regimen_fiscal,
+					productos_especificos,
+					id_cliente_facturacion
+			FROM vf_clientes_razones_sociales_tmp
+			WHERE id_cliente_facturacion_tmp = '{$}'";*/
+			/*$archivo_path = "../../../../../conexion_inicial.txt";
 			if(file_exists($archivo_path) ){
 				$file = fopen($archivo_path,"r");
 				$line=fgets($file);
@@ -251,29 +289,30 @@
 				$local_path = "localhost/" . base64_decode( $tmp[1] ) . "/rest/facturacion/envia_cliente";
 			}else{
 				die("No hay archivo de configuración!!!");
-			}
+			}*/
 			//die( $local_path );
+			$post_data = json_encode( array( "rows"=>$costumers ) );//costumer_json
 			$crl = curl_init( $local_path );
 			curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($crl, CURLINFO_HEADER_OUT, true);
 			curl_setopt($crl, CURLOPT_POST, true);
-			//curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
+			curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
 			//curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-		    curl_setopt($ch, CURLOPT_TIMEOUT, 60000);
+		    curl_setopt($crl, CURLOPT_TIMEOUT, 60000);
 			curl_setopt($crl, CURLOPT_HTTPHEADER, array(
 			  'Content-Type: application/json',
 			  'token: ' . $token)
 			);
 $resp = curl_exec($crl);//envia peticion 
 			curl_close($crl);
-			//die( "{$resp}" );
+			//die( "HERE : {$resp}" );
 			if( $resp != "ok" ){
 				var_dump( $resp );
 				die( "Error!" );
 			}
 			$sql = "SELECT folio_unico FROM vf_clientes_razones_sociales WHERE rfc = '{$rfc}'";
 			$stm = $this->link->query( $sql ) or die( "Error al consultar el folio unico del cliente final : {$this->link->error}" );
-			$final_costumer = $stm->fetch_assoc();
+			$final_costumer = $stm->fetch();
 		//elimina el token
 			//$sql = "DELETE FROM vf_tokens_alta_clientes WHERE token = '{$token}'";
 			//$stm = $this->link->query( $sql ) or die( "Error al eliminar el token : {$this->link->error}" );
@@ -293,7 +332,7 @@ $resp = curl_exec($crl);//envia peticion
 					FROM vf_clientes_contacto 
 					WHERE id_cliente_facturacion = {$costumer_id}";
 			$stm = $this->link->query( $sql ) or die( "Error al consultar datos de contacto : {$this->link->error}" );
-			while ( $row = $stm->fetch_assoc() ) {
+			while ( $row = $stm->fetch() ) {
 				$resp[] = $row;
 			}
 			return "ok|" . json_encode($resp);
@@ -301,8 +340,8 @@ $resp = curl_exec($crl);//envia peticion
 
 		public function seek_by_rfc( $rfc ){
 		//consume el api para subir/descargar clientes a linea
-			$local_path = "";
-			$archivo_path = "../../../../../conexion_inicial.txt";
+			/*$local_path = "https://pruebascdll2024.space/desarrollo_administracion_facturacion/rest/inserta_cliente";
+			/*$archivo_path = "../../../../../conexion_inicial.txt";
 			if(file_exists($archivo_path) ){
 				$file = fopen($archivo_path,"r");
 				$line=fgets($file);
@@ -312,7 +351,7 @@ $resp = curl_exec($crl);//envia peticion
 				$local_path = "localhost/" . base64_decode( $tmp[1] ) . "/rest/facturacion/envia_cliente";
 			}else{
 				die("No hay archivo de configuración!!!");
-			}
+			}//
 			//die( $local_path );
 			$crl = curl_init( $local_path );
 			curl_setopt($crl, CURLOPT_RETURNTRANSFER, true);
@@ -320,13 +359,13 @@ $resp = curl_exec($crl);//envia peticion
 			curl_setopt($crl, CURLOPT_POST, true);
 			//curl_setopt($crl, CURLOPT_POSTFIELDS, $post_data);
 			//curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-		    curl_setopt($ch, CURLOPT_TIMEOUT, 60000);
+		    curl_setopt($chrl, CURLOPT_TIMEOUT, 60000);
 			curl_setopt($crl, CURLOPT_HTTPHEADER, array(
 			  'Content-Type: application/json',
 			  'token: ' . $token)
 			);
 			$resp = curl_exec($crl);//envia peticion 
-			curl_close($crl);
+			curl_close($crl);*/
 		//busca en base de datos
 			$sql = "SELECT 
 						crs.id_cliente_facturacion As costumer_id,
@@ -346,19 +385,18 @@ $resp = curl_exec($crl);//envia peticion
 						crs.regimen_fiscal AS tax_regime,
 						crs.folio_unico AS unique_folio
 					FROM vf_clientes_razones_sociales crs
-					WHERE crs.rfc = '{$rfc}'";
-			//die( $sql );
+					WHERE crs.rfc = '{$rfc}'";//die( $sql );
 			$stm = $this->link->query( $sql ) or die( "Error al consultar si el RFC existe : {$this->link->error}." );
-			if($stm->num_rows > 0 ){
-				$row = $stm->fetch_assoc();
+			if($stm->rowCount() > 0 ){
+				$row = $stm->fetch();
 				return "ok|".json_encode( $row );
 			}else{
 			//consume API para descargar clientes pendientes
 				$costumersSinchronization = $this->getCostumersByAPI();
 			//vuelve a consultar si el cliente existe
 				$stm = $this->link->query( $sql ) or die( "Error al consultar si el RFC existe : {$this->link->error}." );
-				if($stm->num_rows > 0 ){
-					$row = $stm->fetch_assoc();
+				if($stm->rowCount() > 0 ){
+					$row = $stm->fetch();
 					return "ok|" . json_encode( $row );
 				}else{
 					die( "El RFC : {$rfc} no esta registrado, captúrtalo para continuar!" );
@@ -375,7 +413,7 @@ $resp = curl_exec($crl);//envia peticion
 						( SELECT value FROM api_config WHERE name = 'path' ) AS api_path
 					FROM sys_sucursales WHERE acceso = 1";
 			$stm = $this->link->query( $sql ) or die( "Error al consultar configuraciones para consumo de API : {$this->link->error}." );
-			$row = $stm->fetch_assoc();
+			$row = $stm->fetch();
 			$store_id = $row['store_id'];
 			$api_path = $row['api_path'];
 		//consume API

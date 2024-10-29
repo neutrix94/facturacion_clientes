@@ -1,27 +1,12 @@
 <?php
 	//include( '../../../../conexionMysqli.php' );
-	include( '../../../adminFacturacion/include/db.php' );
+	$data = file_get_contents( "../../config/apis.json");
+	$config = json_decode($data, true);
+	$admin_fact_dir = $config['admin_fact_dir'];
+	include( "../../../{$admin_fact_dir}/include/db.php" );
 	$db = new db();	
 	$link = $db->conectDB();
-//validacion de token
-	/*if( !isset( $_GET['token'] ) ){
-		die( "<h3 class=\"text-center\">No hay token, pide ayuda en la tienda donde realizaste la compra!</h3>" );
-	}else{
-		$sql = "SELECT 
-					IF( NOW() < fecha_hora_vencimiento, 'is_valid', 'is_invalid' ) AS token_status
-				FROM vf_tokens_alta_clientes
-				WHERE token = '{$_GET['token']}'";
-		$stm = $link->query( $sql ) or die( "Error al consultar si el token es valido!" );
-		if( $stm->num_rows <= 0 ){
-			die( "<h3 class=\"text-center\">El token es invalido, pide ayuda en la tienda donde realizaste la compra!</h3>" );
-		}else{
-			$row = $stm->fetch_assoc();
-			if( $row['token_status'] == 'is_invalid' ){
-			die( "<h3 class=\"text-center\">El token esta vencido, pide ayuda en la tienda donde realizaste la compra!</h3>" );
-			}
-		}
-		echo "<input type=\"hidden\" id=\"current_token\" value=\"{$_GET['token']}\">";
-	}*/
+
 	$sql = "SELECT
 				UPPER( nombre ) AS name
 			FROM sys_estados";
@@ -51,11 +36,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null" href="library/milligram.min.css">
 <link rel="stylesheet" href="library/modalStyle.css"-->
-	<link rel="stylesheet" type="text/css" href="../../../adminFacturacion/css/icons/css/fontello.css">
+	<link rel="stylesheet" type="text/css" href="../../../<?php echo "{$admin_fact_dir}";?>/css/icons/css/fontello.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
-	<script type="text/javascript" src="../../../adminFacturacion/js/jquery-1.10.2.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="../../../adminFacturacion/css/bootstrap/css/bootstrap.css">
-	<script type="text/javascript" src="../../../adminFacturacion/css/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script type="text/javascript" src="../../../<?php echo "{$admin_fact_dir}";?>/js/jquery-1.10.2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../../<?php echo "{$admin_fact_dir}";?>/css/bootstrap/css/bootstrap.css">
+	<script type="text/javascript" src="../../../<?php echo "{$admin_fact_dir}";?>/css/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="js/contacts.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
 </head>
@@ -63,23 +48,23 @@
 
 
 	<audio id="ok" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/ok.mp3">
+		<source type="audio/wav" src="files/sounds/ok.mp3">
 	</audio>
 	<audio id="error" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/error.mp3">
+		<source type="audio/wav" src="files/sounds/error.mp3">
 	</audio>
 
 	<audio id="costumer_exists" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/costumers/costumer_exists.mp3">
+		<source type="audio/wav" src="files/sounds/costumers/costumer_exists.mp3">
 	</audio>
 	<audio id="costumer_saved" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/costumers/costumer_saved.mp3">
+		<source type="audio/wav" src="files/sounds/costumers/costumer_saved.mp3">
 	</audio>
 	<audio id="new_costumer_with_constance" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/costumers/new_costumer_with_constance.mp3">
+		<source type="audio/wav" src="files/sounds/costumers/new_costumer_with_constance.mp3">
 	</audio>
 	<audio id="new_costumer_without_constance" controls style="display:none;">
-		<source type="audio/wav" src="../../../../files/sounds/costumers/new_costumer_without_constance.mp3">
+		<source type="audio/wav" src="files/sounds/costumers/new_costumer_without_constance.mp3">
 	</audio>
 
 
@@ -139,31 +124,7 @@
 				</button>
 			</div>
 		</div>
-		<!--div class="col-sm-6">
-			Nombre de Contacto<span class="text-danger">*</span>
-			<input type="text" id="costumer_name_input" class="form-control" onblur="changeToUpperCase( this );">
-		</div>
-		<div class="col-sm-6">
-			Telefono <span class="text-danger">*</span>
-			<input type="number" id="telephone_input" class="form-control">
-		</div>
-		<div class="col-sm-6">
-			Celular <span class="text-danger">*</span>
-			<input type="number" id="cellphone_input" class="form-control">
-		</div>
-		<div class="col-sm-6">
-			Correo <span class="text-danger">*</span>
-			<input type="email" id="email_input" class="form-control">
-		</div>
-		<div class="col-sm-6">
-			Uso CFDI <span class="text-danger">*</span>
-			<select class="form-select" id="cfdi_input">
-			<?php
-				//echo $cfdis;
-			?>
-			</select>
-		<br>
-		</div-->
+		
 		<hr>
 		<h2>Razon Social</h2>
 		<hr>

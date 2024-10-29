@@ -1,16 +1,11 @@
-audio_is_playing = null;
+//
+	audio_is_playing = null;
 	
 	function validate_is_just_text( event ){
         var inputValue = event.target.value;
-        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
+        var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9 ]/g, '');//modificado por oscar ( 2024-10-29 ) para permitir espacios
         event.target.value = sanitizedValue;
 	}
-	//document.getElementById('inputSinEspeciales').addEventListener('input', function(event) {
-      //  var inputValue = event.target.value;
-       // var sanitizedValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
-        //event.target.value = sanitizedValue;
-    //});
-
 	function alert_scann( type ){
 		if( audio_is_playing ){
 			audio = null;
@@ -41,12 +36,9 @@ audio_is_playing = null;
 	}
 
 	function save_costumer(){
-		/*$( '.emergent_content' ).html( `<div class="text-center"><br><br><br><h2 class="text-center">Guardando...</h2>
-				<img src="../../../../img/img_casadelasluces/load.gif" widt="50%"></div>` );
-		$( '.emergent' ).css( 'display', 'block' );*/
 		setTimeout( function(){
 			$( '.emergent_content' ).html( `<div class="text-center"><br><br><br><h2 class="text-center">Guardando...</h2>
-				<img src="../../../../img/img_casadelasluces/load.gif" widt="50%"></div>` );
+				<img src="../../img/load.gif" widt="50%"></div>` );
 		$( '.emergent' ).css( 'display', 'block' );
 
 		}, 100 );
@@ -77,7 +69,6 @@ audio_is_playing = null;
 			if( $( '#contact_unique_folio_' + index ).val() != "" ){
 				data_counter ++;
 			}
-			//alert( data_counter );
 			if( data_counter == 0 ){
 				$( this ).remove();
 			}
@@ -150,31 +141,6 @@ audio_is_playing = null;
 		if( stop ){
 			return false;
 		}
-		/*costumer_name = $( '#costumer_name_input' ).val();
-		if( telephone == '' ){
-			alert( "El campo NOMBRE DEL CLIENTE / EMPRESA no puede ir vacío!" );
-			$( '#costumer_name_input' ).focus();
-			return false;
-		}
-		cellphone = $( '#cellphone_input' ).val();
-		/*if( cellphone == '' ){
-			alert( "El campo CELULAR no puede ir vacío!" );
-			$( '#cellphone_input' ).focus();
-			return false;
-		}*/
-		/*telephone = $( '#telephone_input' ).val();
-		if( telephone == '' ){
-			alert( "El campo TELEFONO no puede ir vacío!" );
-			$( '#telephone_input' ).focus();
-			return false;
-		}
-
-		email = $( '#email_input' ).val();
-		if( email == '' ){
-			alert( "El campo EMAIL no puede ir vacío!" );
-			$( '#email_input' ).focus();
-			return false;
-		}*/
 
 		rfc = $( '#rfc_input' ).val();
 		if( rfc == '' ){
@@ -291,16 +257,13 @@ audio_is_playing = null;
 
 		costumer_unique_folio = ( $("#costumer_unique_folio").val() == "" ? "" : $("#costumer_unique_folio").val() );
 		costumer_id = ( $("#costumer_id").val() == "" ? "" : $("#costumer_id").val() );
-/*cellphone : cellphone
-costumer_name : costumer_name,
-telephone :telephone,
-email : email,*/
-		//alert( costumer_contacts );
 		if( costumer_contacts == '' ){
 			alert_scann( "error" );
 			alert( "Debes de capturar almenos un contacto para continuar!" );
+			add_contact_form();
 			setTimeout( function(){
 				close_emergent();
+				$( "#costumer_name_input_0" ).focus();
 			}, 100 );
 			return false;
 		}
@@ -387,7 +350,7 @@ email : email,*/
 		}
 		var url = "ajax/db.php?costumer_fl=seek_by_rfc&rfc=" + rfc;
 		var resp = ajaxR( url ).split( "|" );
-
+//alert(resp);
 		$( '#accordion' ).html( '' );
 
 		if( resp[0] != 'ok' ){
