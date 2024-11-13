@@ -33,7 +33,7 @@
                 $post_data = json_encode( array( "sale_folio"=>$sale_folio, "sale_costumer"=>$sale_costumer, "cfdi_use"=>$cfdi ) );
                 //die( "here : " . $post_data );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/rest/inserta_venta_sistema_facturacion", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/solicitud_factura", $post_data );//inserta_venta_sistema_facturacion
             break;
 
             case 'getBillFiles' :
