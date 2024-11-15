@@ -104,8 +104,8 @@
                         ${disabled}
                     >
                         <option value="-1" ${selected_1}>--Seleccionar--</option>
-                        <option value="1" ${selected_2}>Débito</option>
-                        <option value="2" ${selected_3}>Crédito</option>
+                        <option value="14" ${selected_2}>Débito</option>
+                        <option value="11" ${selected_3}>Crédito</option>
                     </select>
                 </td>`;
             }else{
