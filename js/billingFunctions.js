@@ -95,9 +95,9 @@
                 <td class="text-end">${sale.sale_payments[key].ammount}</td>`;
             if( sale.sale_payments[key].payment_type_id == 7 ){
                 var selected_1 = ( sale.sale_payments[key].payment_subtype == -1 ? ' selected' : '' );
-                var selected_2 = ( sale.sale_payments[key].payment_subtype == 1 ? ' selected' : '' );
-                var selected_3 = ( sale.sale_payments[key].payment_subtype == 2 ? ' selected' : '' );
-                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : ' disabled' );
+                var selected_2 = ( sale.sale_payments[key].payment_subtype == 11 ? ' selected' : '' );
+                var selected_3 = ( sale.sale_payments[key].payment_subtype == 14 ? ' selected' : '' );
+                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : '' );// disabled
                 payments_html += `<td>
                     <select class="form-select" id="payment_subtype" 
                         onchange="updateSubtypePayment( this, ${sale.sale_payments[key].payment_id} );"
