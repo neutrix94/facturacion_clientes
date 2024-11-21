@@ -95,17 +95,17 @@
                 <td class="text-end">${sale.sale_payments[key].ammount}</td>`;
             if( sale.sale_payments[key].payment_type_id == 7 ){
                 var selected_1 = ( sale.sale_payments[key].payment_subtype == -1 ? ' selected' : '' );
-                var selected_2 = ( sale.sale_payments[key].payment_subtype == 1 ? ' selected' : '' );
-                var selected_3 = ( sale.sale_payments[key].payment_subtype == 2 ? ' selected' : '' );
-                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : ' disabled' );
+                var selected_2 = ( sale.sale_payments[key].payment_subtype == 14 ? ' selected' : '' );
+                var selected_3 = ( sale.sale_payments[key].payment_subtype == 11 ? ' selected' : '' );
+                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : '' );// disabled
                 payments_html += `<td>
                     <select class="form-select" id="payment_subtype" 
                         onchange="updateSubtypePayment( this, ${sale.sale_payments[key].payment_id} );"
                         ${disabled}
                     >
                         <option value="-1" ${selected_1}>--Seleccionar--</option>
-                        <option value="1" ${selected_2}>Débito</option>
-                        <option value="2" ${selected_3}>Crédito</option>
+                        <option value="14" ${selected_2}>Débito</option>
+                        <option value="11" ${selected_3}>Crédito</option>
                     </select>
                 </td>`;
             }else{
