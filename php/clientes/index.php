@@ -96,8 +96,8 @@
 		</div>
 	</div>
 
-	<h2 class="text-center bg-primary text-light" 
-		style="position : sticky; top : 0 !important; padding : 10px; z-index: 100;">Alta de clientes</h2>
+	<h2 class="text-center bg-danger text-light" 
+		style="position : sticky; top : 0 !important; padding : 10px; z-index: 100;">Alta de clientes Público (Cliente se da de alta)</h2>
 	<div class="row text-center" style="padding : 20px;">
 		<label class="text-start">Buscador por RFC</label>
 		<div class="input-group">
@@ -243,7 +243,7 @@
 			<button
 				class="btn btn-light"
 				type="button"
-				onclick="if( confirm( 'Salir al panel?' ) ){ location.href = '../../../../index.php?'}"
+				onclick="if( confirm( 'Salir al panel?' ) ){ location.href = '../../index.php?'}"
 			>
 				<i class="icon-home-1"></i>
 			</button>
