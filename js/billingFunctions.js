@@ -203,10 +203,10 @@ var global_sale = null, global_costumer = null;
             var resp = ajaxR( url );
 //alert( resp );
             var text_color = "text-success";
+            var json_resp = JSON.parse(resp);
             if(json_resp.sub_status){
                 text_color = "text-danger";
             }
-            var json_resp = JSON.parse(resp);
             var content = `<h2 class="text-center ${text_color}">${json_resp.message}</h2>`;
             if(json_resp.sub_status){
                 content += `<h4 class="text-center text-danger">Error : ${json_resp.sub_status}</h4>`;
