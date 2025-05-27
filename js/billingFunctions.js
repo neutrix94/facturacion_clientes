@@ -204,8 +204,8 @@ var global_sale = null, global_costumer = null;
 //alert( resp );
             var json_resp = JSON.parse(resp);
             var content = `<h2 class="text-center">${json_resp.message}</h2>`;
-            if(json_resp.message.sub_status){
-                content += `<h4 class="text-center">Error : ${json_resp.message.sub_status}</h4>`;
+            if(json_resp.sub_status){
+                content += `<h4 class="text-center text-danger">Error : ${json_resp.sub_status}</h4>`;
             }
             if( json_resp.files_url && json_resp.bill_system_id ){
                 $( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
