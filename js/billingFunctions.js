@@ -1,4 +1,4 @@
-    var global_sale = null, global_costumer = null;
+var global_sale = null, global_costumer = null;
 //busqueda de cliente por RFC
     function getClientByRfc( e ){
         if( e.keyCode != 13 && e != 'intro' ){
@@ -77,6 +77,9 @@
         }else{
             global_sale = sale_json;
             setSale( sale_json );
+            setTimeout( function(){
+                setFinalPaymentType();
+            }, 400);    
         }
     }
 
@@ -119,6 +122,52 @@
         $( '#bill_container' ).css( "display", "block" );
     }
 
+    function setFinalPaymentType(){
+    //recorre los tipos de pagos
+        var payments = new Array();
+        var payments_types = new Array();
+    //valida tipos de pago
+        $( '#payments_list tr' ).each( function ( index ){
+            $( this ).children('td').each( function ( index2 ){
+                if( index2 == 0 ){
+                    //alert( $(this).attr("value") );
+                    if( ! payments_types.includes( $(this).attr("value") ) ){
+                        payments_types.push( $(this).attr("value") );
+                    }
+                }
+            });
+        });
+        //alert(payments_types);
+        if( payments_types.length > 1 ){
+            $( '#payment_type' ).empty();
+            $( '#payment_type' ).html( '<option value="17">OTROS</option>' );
+        }else{
+            if( payments_types.length == 1 && payments_types[0] == 1 ){
+                $( '#payment_type' ).html( '<option value="1">EFECTIVO</option>' );
+            }else if( payments_types.length == 1 ){//&& payments_types[0] == 1 
+            //recorre tipos de pagos
+                payments_types = new Array();
+                $( '#payments_list tr' ).each( function ( index ){
+                    $( this ).children('td').each( function ( index2 ){
+                        if( index2 == 2 ){
+                            $( this ).children('select').each( function( index3 ){
+                                if( $( this ).val() == 11 ){
+                                    $( '#payment_type' ).html( '<option value="11">TARJETA DE CRÉDITO</option>' );
+                                }else if(  $( this ).val() == 14 ){
+                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉDITO</option>' );
+                                }
+                            });
+                            //alert( $(this).attr("value") );
+                            //if( ! payments_types.includes( $(this).attr("value") ) ){
+                              //  payments_types.push( $(this).attr("value") );
+                           // }
+                        }
+                    });
+                });
+            }
+        }
+    }
+
     function updateSubtypePayment( obj, payment_id ){
         var payment_subtype =  $( obj ).val();
         if( payment_subtype == -1 ){
@@ -145,11 +194,19 @@
         setTimeout( function(){
             var costumer = global_costumer.costumer.costumer_rfc;
             var sale = global_sale.sale.folio;
-            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=` + cfdi_use;
+            var payment_type = $( '#payment_type' ).val();
+            if( payment_type == '' || payment_type == -1 || payment_type == null ){
+                alert( "El tipo de pago es requerido." );
+                return false;
+            }
+            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}`;
             var resp = ajaxR( url );
 //alert( resp );
             var json_resp = JSON.parse(resp);
-            var content = `<h2>${json_resp.message}</h2>`;
+            var content = `<h2 class="text-center">${json_resp.message}</h2>`;
+            if(json_resp.message.sub_status){
+                content += `<h4 class="text-center">Error : ${json_resp.message.sub_status}</h4>`;
+            }
             if( json_resp.files_url && json_resp.bill_system_id ){
                 $( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
                 $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
