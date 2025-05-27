@@ -202,8 +202,12 @@ var global_sale = null, global_costumer = null;
             var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}`;
             var resp = ajaxR( url );
 //alert( resp );
+            var text_color = "text-success";
+            if(json_resp.sub_status){
+                text_color = "text-danger";
+            }
             var json_resp = JSON.parse(resp);
-            var content = `<h2 class="text-center">${json_resp.message}</h2>`;
+            var content = `<h2 class="text-center ${text_color}">${json_resp.message}</h2>`;
             if(json_resp.sub_status){
                 content += `<h4 class="text-center text-danger">Error : ${json_resp.sub_status}</h4>`;
             }
