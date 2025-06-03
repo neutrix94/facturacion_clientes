@@ -203,7 +203,7 @@ var global_sale = null, global_costumer = null;
             var resp = ajaxR( url );
 //alert( resp );
             var text_color = "text-success";
-            resp = json_resp.replaceAll("\'", "'");
+            resp = resp.replaceAll("\'", "'");
             var json_resp = JSON.parse(resp);
             if(json_resp.sub_status){
                 text_color = "text-danger";
