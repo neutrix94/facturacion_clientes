@@ -144,6 +144,8 @@ var global_sale = null, global_costumer = null;
         }else{
             if( payments_types.length == 1 && payments_types[0] == 1 ){
                 $( '#payment_type' ).html( '<option value="1">EFECTIVO</option>' );
+            }else if( payments_types.length == 1 && payments_types[0] == 2 ){
+                $( '#payment_type' ).html( '<option value="17">OTROS</option>' );
             }else if( payments_types.length == 1 ){//&& payments_types[0] == 1 
             //recorre tipos de pagos
                 payments_types = new Array();
@@ -155,6 +157,8 @@ var global_sale = null, global_costumer = null;
                                     $( '#payment_type' ).html( '<option value="11">TARJETA DE CRÉDITO</option>' );
                                 }else if(  $( this ).val() == 14 ){
                                     $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉDITO</option>' );
+                                }else if(  $( this ).val() == 8 ){
+                                    $( '#payment_type' ).html( '<option value="9">TRANSFERENCIA</option>' );
                                 }
                             });
                             //alert( $(this).attr("value") );
