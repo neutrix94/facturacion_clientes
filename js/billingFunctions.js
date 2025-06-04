@@ -213,6 +213,7 @@ var global_sale = null, global_costumer = null;
                 return false;
             }
             var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}`;
+            alert(url);
             var resp = ajaxR( url );
 //alert( resp );
             var text_color = "text-success";
