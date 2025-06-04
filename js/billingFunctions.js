@@ -120,6 +120,19 @@ var global_sale = null, global_costumer = null;
         $( '#payments_list' ).html( `${payments_html}` );
         $( '#payments_container' ).removeClass( 'hidden' );
         $( '#bill_container' ).css( "display", "block" );
+        //valida si la venta fue facturada
+        if(sale.sale.id_status_facturacion == 8){
+            $( '#files_download' ).attr( "url", `${sale.sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
+            $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+            $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+            $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
+            //$( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
+            $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#payments_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#contacts_container' ).css("display", "none");
+            $( '#special_messages' ).html("La nota de venta ya habia sido facturada anteriormente.");
+        }
     }
 
     function setFinalPaymentType(){
@@ -144,6 +157,10 @@ var global_sale = null, global_costumer = null;
         }else{
             if( payments_types.length == 1 && payments_types[0] == 1 ){
                 $( '#payment_type' ).html( '<option value="1">EFECTIVO</option>' );
+            }else if( payments_types.length == 1 && payments_types[0] == 2 ){
+                $( '#payment_type' ).html( '<option value="17">OTROS</option>' );
+            }else if( payments_types.length == 1 && payments_types[0] == 8 ){
+                                    $( '#payment_type' ).html( '<option value="9">TRANSFERENCIA</option>' );
             }else if( payments_types.length == 1 ){//&& payments_types[0] == 1 
             //recorre tipos de pagos
                 payments_types = new Array();
@@ -154,13 +171,9 @@ var global_sale = null, global_costumer = null;
                                 if( $( this ).val() == 11 ){
                                     $( '#payment_type' ).html( '<option value="11">TARJETA DE CRÉDITO</option>' );
                                 }else if(  $( this ).val() == 14 ){
-                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉDITO</option>' );
+                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉBITO</option>' );
                                 }
                             });
-                            //alert( $(this).attr("value") );
-                            //if( ! payments_types.includes( $(this).attr("value") ) ){
-                              //  payments_types.push( $(this).attr("value") );
-                           // }
                         }
                     });
                 });
@@ -203,6 +216,7 @@ var global_sale = null, global_costumer = null;
             var resp = ajaxR( url );
 //alert( resp );
             var text_color = "text-success";
+            resp = resp.replaceAll(/\\'/g, "'");//resp.replaceAll("\'", "'");
             var json_resp = JSON.parse(resp);
             if(json_resp.sub_status){
                 text_color = "text-danger";
@@ -226,31 +240,12 @@ var global_sale = null, global_costumer = null;
     }
 
     function downloadFiles(){
-        // Hacer una solicitud fetch para obtener el archivo ZIP
         var url = $('#files_download').attr( "url" );
-        if( url == "" ){
-            alert( "No hay nota de venta facturada" );
-            return false;
-        }
-        fetch(url)
-            .then(response => response.blob())  // Convertir la respuesta en un blob
-            .then(blob => {
-                // Crear un enlace temporal
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'archivo.zip';  // Nombre del archivo ZIP para la descarga
-                document.body.appendChild(a);
-                a.click();
-               // a.remove();  // Eliminar el enlace temporal
-                window.URL.revokeObjectURL(url);  // Liberar el objeto URL
-                show_alert( `<h3 class="text-center"></h3>
-                    <div class="text-center">
-                        <h2 class="text-success">Archivos descargados exitosamente.</h2>
-                    </div>`, true );
-            })
-            .catch(() => alert('Error al descargar el archivo.'));
-            
+        var ventana = window.open(url, '_blank');
+        setTimeout(function(){
+            ventana.close();
+            location.reload();
+        },2000);
     }
 
     function sendEmail(){
