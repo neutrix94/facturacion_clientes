@@ -120,6 +120,17 @@ var global_sale = null, global_costumer = null;
         $( '#payments_list' ).html( `${payments_html}` );
         $( '#payments_container' ).removeClass( 'hidden' );
         $( '#bill_container' ).css( "display", "block" );
+        //valida si la venta fue facturada
+        if(sale.sale.id_status_facturacion == 8){
+            $( '#files_download' ).attr( "url", `${json_resp.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
+            $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+            $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+            $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
+            if( json_resp.status == 200 ){
+                $( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
+                $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
+            }
+        }
     }
 
     function setFinalPaymentType(){
@@ -158,7 +169,7 @@ var global_sale = null, global_costumer = null;
                                 if( $( this ).val() == 11 ){
                                     $( '#payment_type' ).html( '<option value="11">TARJETA DE CRÉDITO</option>' );
                                 }else if(  $( this ).val() == 14 ){
-                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉDITO</option>' );
+                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉBITO</option>' );
                                 }
                             });
                         }
