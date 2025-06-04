@@ -122,7 +122,7 @@ var global_sale = null, global_costumer = null;
         $( '#bill_container' ).css( "display", "block" );
         //valida si la venta fue facturada
         if(sale.sale.id_status_facturacion == 8){
-            $( '#files_download' ).attr( "url", `${json_resp.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
+            $( '#files_download' ).attr( "url", `${sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
             $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
             $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
             $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
