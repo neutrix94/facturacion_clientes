@@ -240,29 +240,10 @@ var global_sale = null, global_costumer = null;
     function downloadFiles(){
         // Hacer una solicitud fetch para obtener el archivo ZIP
         var url = $('#files_download').attr( "url" );
-        if( url == "" ){
-            alert( "No hay nota de venta facturada" );
-            return false;
-        }
-        fetch(url)
-            .then(response => response.blob())  // Convertir la respuesta en un blob
-            .then(blob => {
-                // Crear un enlace temporal
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'archivo.zip';  // Nombre del archivo ZIP para la descarga
-                document.body.appendChild(a);
-                a.click();
-               // a.remove();  // Eliminar el enlace temporal
-                window.URL.revokeObjectURL(url);  // Liberar el objeto URL
-                show_alert( `<h3 class="text-center"></h3>
-                    <div class="text-center">
-                        <h2 class="text-success">Archivos descargados exitosamente.</h2>
-                    </div>`, true );
-            })
-            .catch(() => alert('Error al descargar el archivo.'));
-            
+        var ventana = window.open(url, '_blank');
+        setTimeout(function(){
+            ventana.close();
+        },2000);
     }
 
     function sendEmail(){
