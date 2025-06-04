@@ -238,11 +238,11 @@ var global_sale = null, global_costumer = null;
     }
 
     function downloadFiles(){
-        // Hacer una solicitud fetch para obtener el archivo ZIP
         var url = $('#files_download').attr( "url" );
         var ventana = window.open(url, '_blank');
         setTimeout(function(){
             ventana.close();
+            location.reload();
         },2000);
     }
 
