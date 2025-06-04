@@ -131,6 +131,7 @@ var global_sale = null, global_costumer = null;
             $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
             $( '#payments_container' ).css( "display", "none" );//oculta boton de facturacion
             $( '#contacts_container' ).css("display", "none");
+            $( '#special_messages' ).html("La nota de venta ya habia sido facturada anteriormente.");
         }
     }
 
