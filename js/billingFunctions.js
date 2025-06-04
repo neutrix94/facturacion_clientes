@@ -126,8 +126,10 @@ var global_sale = null, global_costumer = null;
             $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
             $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
             $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
-            $( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
-            //$( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
+            //$( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
+            $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
+            
         }
     }
 
