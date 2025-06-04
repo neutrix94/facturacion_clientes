@@ -107,7 +107,7 @@
                     </button>
                 </div>
                 <div>
-                    <p>24MAT7</p>
+                   <h3 id="special_messages" class="text-center"></h3> 
                 </div>
                 <br>
                 <div class="hidden" id="payments_container">
