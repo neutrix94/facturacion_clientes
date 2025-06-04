@@ -129,7 +129,8 @@ var global_sale = null, global_costumer = null;
             //$( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
             $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
             $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
-            
+            $( '#payments_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#contacts_container' ).css("display", "none");
         }
     }
 
