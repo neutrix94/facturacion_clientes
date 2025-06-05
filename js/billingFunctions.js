@@ -213,7 +213,7 @@ var global_sale = null, global_costumer = null;
                 return false;
             }
             var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}`;
-            alert(url);
+//alert(url);
             var resp = ajaxR( url );
 //alert( resp );
             var text_color = "text-success";
@@ -251,7 +251,7 @@ var global_sale = null, global_costumer = null;
 
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
-        var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;alert(url);
+        var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
         var resp = ajaxR( url );alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
