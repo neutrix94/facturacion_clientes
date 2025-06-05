@@ -45,7 +45,7 @@
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $post_data = json_encode( array( "sale_folio"=>$sale_folio ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/envia_factura_correo", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/envia_factura_correo", $post_data );
             break;
                 
             default :
