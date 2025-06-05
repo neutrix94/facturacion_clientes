@@ -137,12 +137,13 @@
                     </div>
                 </div>
                 <div id="bill_container" class="hidden">
+                    <br>
                     <button
                         type="button"
                         class="btn btn-success form-control"
                         onclick="Bill();"
                     >
-                        <i class="icon-ok-circle">Facturar</i>
+                        <i class="icon-ok-circle">Solicitar Factura</i>
                     </button>
                 </div>
                 <div id="download_container" class="hidden">

@@ -30,7 +30,8 @@
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $sale_costumer = ( isset( $_POST['sale_costumer'] ) ? $_POST['sale_costumer'] : $_GET['sale_costumer'] );
                 $cfdi = ( isset( $_POST['cfdi'] ) ? $_POST['cfdi'] : $_GET['cfdi'] );
-                $post_data = json_encode( array( "sale_folio"=>$sale_folio, "sale_costumer"=>$sale_costumer, "cfdi_use"=>$cfdi ) );
+                $payment_type = ( isset( $_POST['payment_type'] ) ? $_POST['payment_type'] : $_GET['payment_type'] );
+                $post_data = json_encode( array( "sale_folio"=>$sale_folio, "sale_costumer"=>$sale_costumer, "cfdi_use"=>$cfdi, "payment_type"=>$payment_type ) );
                 //die( "here : " . $post_data );
                 $url = $Routes->getPath( 'billing_api' );
                 echo $Routes->sendPetition( "{$url}/rest/solicitud_factura", $post_data );//inserta_venta_sistema_facturacion
@@ -44,7 +45,8 @@
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $post_data = json_encode( array( "sale_folio"=>$sale_folio ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/envia_factura_correo", $post_data );
+//error_log("URL CORREO : {$url}/rest/envia_factura_correo");
+                echo $Routes->sendPetition( "{$url}/rest/envia_factura_correo", $post_data );
             break;
                 
             default :
