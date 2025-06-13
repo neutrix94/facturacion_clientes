@@ -34,7 +34,7 @@ var global_sale = null, global_costumer = null;
                 <td id="contact_1_${key}">${costumer.contacts[key].contact_email}</td>
                 <td id="contact_2_${key}" value="${costumer.contacts[key].cfdi_use_id}">${costumer.contacts[key].cfdi_use_name}</td>
                 <td class="text-center">
-                    <input type="radio" name="contact_selected" id="contact_3_${key}" onclick="change_cfdi_use( ${key} );">
+                    <input type="radio" name="contact_selected" id="contact_3_${key}" onclick="change_cfdi_use( ${key} );" contact_id="${costumer.contacts[key].contact_costumer_id}">
                 </td>
             </tr>`;
             count ++;
@@ -199,6 +199,16 @@ var global_sale = null, global_costumer = null;
             alert( "Debes de elegir un contacto para continuar." );
             return false;
         }
+        var contact_id = null;
+        $('#contacts_list tr').each(function(index1){
+            if($('#contact_3_' + index1).prop('checked') == true){
+                contact_id = $('#contact_3_' + index1).attr('contact_id');
+            }
+        });
+        if(contact_id == null){
+            alert( "Debes de elegir un contacto para continuar." );
+            return false;
+        }
         show_alert( `<h3 class="text-center">Generando factura...</h3>
             <div class="text-center">
                 <img src="img/load.gif" width="200px">
@@ -212,7 +222,7 @@ var global_sale = null, global_costumer = null;
                 alert( "El tipo de pago es requerido." );
                 return false;
             }
-            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}`;
+            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
 //alert(url);
             var resp = ajaxR( url );
 //alert( resp );
