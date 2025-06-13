@@ -1,4 +1,4 @@
-    var global_sale = null, global_costumer = null;
+var global_sale = null, global_costumer = null;
 //busqueda de cliente por RFC
     function getClientByRfc( e ){
         if( e.keyCode != 13 && e != 'intro' ){
@@ -34,7 +34,7 @@
                 <td id="contact_1_${key}">${costumer.contacts[key].contact_email}</td>
                 <td id="contact_2_${key}" value="${costumer.contacts[key].cfdi_use_id}">${costumer.contacts[key].cfdi_use_name}</td>
                 <td class="text-center">
-                    <input type="radio" name="contact_selected" id="contact_3_${key}" onclick="change_cfdi_use( ${key} );">
+                    <input type="radio" name="contact_selected" id="contact_3_${key}" onclick="change_cfdi_use( ${key} );" contact_id="${costumer.contacts[key].contact_costumer_id}">
                 </td>
             </tr>`;
             count ++;
@@ -77,6 +77,9 @@
         }else{
             global_sale = sale_json;
             setSale( sale_json );
+            setTimeout( function(){
+                setFinalPaymentType();
+            }, 400);    
         }
     }
 
@@ -95,17 +98,17 @@
                 <td class="text-end">${sale.sale_payments[key].ammount}</td>`;
             if( sale.sale_payments[key].payment_type_id == 7 ){
                 var selected_1 = ( sale.sale_payments[key].payment_subtype == -1 ? ' selected' : '' );
-                var selected_2 = ( sale.sale_payments[key].payment_subtype == 1 ? ' selected' : '' );
-                var selected_3 = ( sale.sale_payments[key].payment_subtype == 2 ? ' selected' : '' );
-                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : ' disabled' );
+                var selected_2 = ( sale.sale_payments[key].payment_subtype == 14 ? ' selected' : '' );
+                var selected_3 = ( sale.sale_payments[key].payment_subtype == 11 ? ' selected' : '' );
+                var disabled = ( sale.sale_payments[key].payment_subtype == -1 ? '' : '' );// disabled
                 payments_html += `<td>
                     <select class="form-select" id="payment_subtype" 
                         onchange="updateSubtypePayment( this, ${sale.sale_payments[key].payment_id} );"
                         ${disabled}
                     >
                         <option value="-1" ${selected_1}>--Seleccionar--</option>
-                        <option value="1" ${selected_2}>Débito</option>
-                        <option value="2" ${selected_3}>Crédito</option>
+                        <option value="14" ${selected_2}>Débito</option>
+                        <option value="11" ${selected_3}>Crédito</option>
                     </select>
                 </td>`;
             }else{
@@ -117,6 +120,65 @@
         $( '#payments_list' ).html( `${payments_html}` );
         $( '#payments_container' ).removeClass( 'hidden' );
         $( '#bill_container' ).css( "display", "block" );
+        //valida si la venta fue facturada
+        if(sale.sale.id_status_facturacion == 8){
+            $( '#files_download' ).attr( "url", `${sale.sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
+            $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+            $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+            $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
+            //$( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
+            $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#payments_container' ).css( "display", "none" );//oculta boton de facturacion
+            $( '#contacts_container' ).css("display", "none");
+            $( '#special_messages' ).html("La nota de venta ya habia sido facturada anteriormente.");
+        }
+    }
+
+    function setFinalPaymentType(){
+    //recorre los tipos de pagos
+        var payments = new Array();
+        var payments_types = new Array();
+    //valida tipos de pago
+        $( '#payments_list tr' ).each( function ( index ){
+            $( this ).children('td').each( function ( index2 ){
+                if( index2 == 0 ){
+                    //alert( $(this).attr("value") );
+                    if( ! payments_types.includes( $(this).attr("value") ) ){
+                        payments_types.push( $(this).attr("value") );
+                    }
+                }
+            });
+        });
+        //alert(payments_types);
+        if( payments_types.length > 1 ){
+            $( '#payment_type' ).empty();
+            $( '#payment_type' ).html( '<option value="17">OTROS</option>' );
+        }else{
+            if( payments_types.length == 1 && payments_types[0] == 1 ){
+                $( '#payment_type' ).html( '<option value="1">EFECTIVO</option>' );
+            }else if( payments_types.length == 1 && payments_types[0] == 2 ){
+                $( '#payment_type' ).html( '<option value="17">OTROS</option>' );
+            }else if( payments_types.length == 1 && payments_types[0] == 8 ){
+                                    $( '#payment_type' ).html( '<option value="9">TRANSFERENCIA</option>' );
+            }else if( payments_types.length == 1 ){//&& payments_types[0] == 1 
+            //recorre tipos de pagos
+                payments_types = new Array();
+                $( '#payments_list tr' ).each( function ( index ){
+                    $( this ).children('td').each( function ( index2 ){
+                        if( index2 == 2 ){
+                            $( this ).children('select').each( function( index3 ){
+                                if( $( this ).val() == 11 ){
+                                    $( '#payment_type' ).html( '<option value="11">TARJETA DE CRÉDITO</option>' );
+                                }else if(  $( this ).val() == 14 ){
+                                    $( '#payment_type' ).html( '<option value="14">TARJETA DE DÉBITO</option>' );
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        }
     }
 
     function updateSubtypePayment( obj, payment_id ){
@@ -137,6 +199,16 @@
             alert( "Debes de elegir un contacto para continuar." );
             return false;
         }
+        var contact_id = null;
+        $('#contacts_list tr').each(function(index1){
+            if($('#contact_3_' + index1).prop('checked') == true){
+                contact_id = $('#contact_3_' + index1).attr('contact_id');
+            }
+        });
+        if(contact_id == null){
+            alert( "Debes de elegir un contacto para continuar." );
+            return false;
+        }
         show_alert( `<h3 class="text-center">Generando factura...</h3>
             <div class="text-center">
                 <img src="img/load.gif" width="200px">
@@ -145,11 +217,25 @@
         setTimeout( function(){
             var costumer = global_costumer.costumer.costumer_rfc;
             var sale = global_sale.sale.folio;
-            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=` + cfdi_use;
+            var payment_type = $( '#payment_type' ).val();
+            if( payment_type == '' || payment_type == -1 || payment_type == null ){
+                alert( "El tipo de pago es requerido." );
+                return false;
+            }
+            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
+//alert(url);
             var resp = ajaxR( url );
 //alert( resp );
+            var text_color = "text-success";
+            resp = resp.replaceAll(/\\'/g, "'");//resp.replaceAll("\'", "'");
             var json_resp = JSON.parse(resp);
-            var content = `<h2>${json_resp.message}</h2>`;
+            if(json_resp.sub_status){
+                text_color = "text-danger";
+            }
+            var content = `<h2 class="text-center ${text_color}">${json_resp.message}</h2>`;
+            if(json_resp.sub_status){
+                content += `<h4 class="text-center text-danger">Error : ${json_resp.sub_status}</h4>`;
+            }
             if( json_resp.files_url && json_resp.bill_system_id ){
                 $( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
                 $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
@@ -165,37 +251,18 @@
     }
 
     function downloadFiles(){
-        // Hacer una solicitud fetch para obtener el archivo ZIP
         var url = $('#files_download').attr( "url" );
-        if( url == "" ){
-            alert( "No hay nota de venta facturada" );
-            return false;
-        }
-        fetch(url)
-            .then(response => response.blob())  // Convertir la respuesta en un blob
-            .then(blob => {
-                // Crear un enlace temporal
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'archivo.zip';  // Nombre del archivo ZIP para la descarga
-                document.body.appendChild(a);
-                a.click();
-               // a.remove();  // Eliminar el enlace temporal
-                window.URL.revokeObjectURL(url);  // Liberar el objeto URL
-                show_alert( `<h3 class="text-center"></h3>
-                    <div class="text-center">
-                        <h2 class="text-success">Archivos descargados exitosamente.</h2>
-                    </div>`, true );
-            })
-            .catch(() => alert('Error al descargar el archivo.'));
-            
+        var ventana = window.open(url, '_blank');
+        setTimeout(function(){
+            ventana.close();
+            location.reload();
+        },2000);
     }
 
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
-        var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;alert(url);
-        var resp = ajaxR( url );
+        var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
+        var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
         show_alert( `<h3 class="text-center"></h3>

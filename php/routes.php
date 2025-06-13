@@ -1,8 +1,6 @@
 <?php
+/*Version 1.0 Verificado por Oscar 2024-10-30*/
     if( isset( $_POST['action'] ) || isset( $_GET['action'] ) ){
-        //include( 'bd.php' );
-        //$db = new db();
-       // $link =
         $Routes = new Routes();
         $action = ( isset( $_POST['action'] ) ? $_POST['action'] : $_GET['action'] );
         switch ( $action ) {
@@ -10,14 +8,14 @@
                 $rfc = ( isset( $_POST['rfc'] ) ? $_POST['rfc'] : $_GET['rfc'] );
                 $post_data = json_encode( array( "rfc"=>$rfc ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/busca_clientes_por_rfc", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/busca_clientes_por_rfc", $post_data );
             break;
 
             case 'getSale' :
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $post_data = json_encode( array( "folio"=>$sale_folio ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/busca_ventas_por_folio", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/busca_ventas_por_folio", $post_data );
             break;
 
             case 'updatePaymentSubtype' :
@@ -25,17 +23,20 @@
                 $payment_subtype = ( isset( $_POST['payment_subtype'] ) ? $_POST['payment_subtype'] : $_GET['payment_subtype'] );
                 $post_data = json_encode( array( "payment_id"=>$payment_id, "payment_subtype"=>$payment_subtype ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/actualiza_subtipo_pago", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/actualiza_subtipo_pago", $post_data );
             break;
 
             case 'sendBill' :
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $sale_costumer = ( isset( $_POST['sale_costumer'] ) ? $_POST['sale_costumer'] : $_GET['sale_costumer'] );
                 $cfdi = ( isset( $_POST['cfdi'] ) ? $_POST['cfdi'] : $_GET['cfdi'] );
-                $post_data = json_encode( array( "sale_folio"=>$sale_folio, "sale_costumer"=>$sale_costumer, "cfdi_use"=>$cfdi ) );
+                $payment_type = ( isset( $_POST['payment_type'] ) ? $_POST['payment_type'] : $_GET['payment_type'] );
+                $contact_id = ( isset( $_POST['contact_id'] ) ? $_POST['contact_id'] : $_GET['contact_id'] );
+                $post_data = json_encode( array( "sale_folio"=>$sale_folio, "sale_costumer"=>$sale_costumer, 
+                    "cfdi_use"=>$cfdi, "payment_type"=>$payment_type, "contact_id"=>$contact_id ) );
                 //die( "here : " . $post_data );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/inserta_venta_sistema_facturacion", $post_data );
+                echo $Routes->sendPetition( "{$url}/rest/solicitud_factura", $post_data );//inserta_venta_sistema_facturacion
             break;
 
             case 'getBillFiles' :
@@ -46,7 +47,8 @@
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
                 $post_data = json_encode( array( "sale_folio"=>$sale_folio ) );
                 $url = $Routes->getPath( 'billing_api' );
-                echo $Routes->sendPetition( "{$url}/envia_factura_correo", $post_data );
+//error_log("URL CORREO : {$url}/rest/envia_factura_correo");
+                echo $Routes->sendPetition( "{$url}/rest/envia_factura_correo", $post_data );
             break;
                 
             default :

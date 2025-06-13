@@ -230,7 +230,8 @@
 						"correo"=>"{$contact[3]}",
 						"uso_cfdi"=>"{$contact[4]}",
 						"id_cliente_contacto"=>( $contact[6] == '' || $contact[6] == 0 ? 0 : $contact[6] ),
-						"id_cliente_facturacion"=>( $costumer_id == '' || $costumer_id == 0 ? 0 : $costumer_id )
+						"id_cliente_facturacion"=>( $costumer_id == '' || $costumer_id == 0 ? 0 : $costumer_id ), 
+						"system_type"=>"Alta desde sistema publico de Facturacion"
 					);
 					array_push( $costumer_json['detail'], $contact_tmp );
 					/*$sql = "INSERT INTO vf_clientes_contacto_tmp
