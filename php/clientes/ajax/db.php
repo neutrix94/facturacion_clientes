@@ -131,7 +131,7 @@
 			$general_api_url = $config['general_api'];
 			$billing_api_url = $config['billing_api'];
 		//valida 
-			$local_path = "{$general_api_url}/rest/v1/facturaReceptor";
+			$local_path = "{$general_api_url}/rest_v2/facturacion/facturaReceptor";
 			$name = str_replace('"', '&quot;', $name );
 			
 			/*foreach ($replace as $key => $rep) {
