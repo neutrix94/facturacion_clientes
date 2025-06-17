@@ -314,7 +314,7 @@
 				$local_path = "localhost/" . base64_decode( $tmp[1] ) . "/rest/facturacion/envia_cliente";
 			}else{
 				die("No hay archivo de configuración!!!");
-			}*/
+			}*/ 
 			//die( $local_path );
 			$post_data = json_encode( array( "rows"=>$costumers ) );//costumer_json
 			$crl = curl_init( $local_path );
