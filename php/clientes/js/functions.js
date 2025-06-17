@@ -297,16 +297,18 @@
 				dat = dat.trim().split( '|' );
 				if( dat[0]== 'ok' ){
 					var content = `<div class="row text-center" style="padding : 10px;">
-						<h2 class="text-success text-center">El cliente fue registrado exitosamente!</h2>
+						<h2 class="text-success text-center">El cliente fue registrado exitosamente.</h2>
 						<br><br>
 						<h2 class="text-primary text-center">Folio del cliente : <b>${dat[1]}</b></h2>
 						<br><br>
-						<button
-							class="btn btn-success form-control"
-							onclick="location.href='index.php';"
-						>
-							<i class="icon-ok-circle">Aceptar</i>
-						</button>
+						<div class="text-center">
+							<button
+								class="btn btn-success form-control"
+								onclick="location.href='index.php';"
+							>
+								<i class="icon-ok-circle">Aceptar</i>
+							</button>
+						</div>
 					</div>`;
 					alert_scann( "costumer_saved" );
 					setTimeout( function(){
@@ -316,8 +318,30 @@
 				}else{
 					alert_scann( "error" );
 					setTimeout( function(){
-						$( '.emergent_content' ).html( dat );
-						$( '.emergent' ).css( 'display', 'block' );
+						
+						//$( '.emergent_content' ).html( content );
+						//$( '.emergent' ).css( 'display', 'block' );
+						//alert(dat);
+						console.log(dat);
+						var json_tmp = JSON.parse(dat);
+						if(json_tmp.status && json_tmp.status == 'contacto_repetido'){
+							var content = `<h2>${json_tmp.message}</h2>
+								<br>
+								<div class="text-center">
+									<button
+										type="button"
+										class="btn btn-warning"
+										onclick="close_emergent();"
+									>
+										<i class="icon-warning">Aceptar y cerrar</i>
+									</button>
+								</div>`;
+							$( '.emergent_content' ).html( content );
+							$( '.emergent' ).css( 'display', 'block' );
+						}else{
+							$( '.emergent_content' ).html( dat );
+							$( '.emergent' ).css( 'display', 'block' );
+						}
 					}, 100);
 				}
 			}
