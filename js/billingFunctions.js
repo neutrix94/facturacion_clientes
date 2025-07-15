@@ -82,7 +82,7 @@ var global_sale = null, global_costumer = null;
                 <h3 class=\"text-center\"><b>Lo sentimos</b></h3>
                 <h5>Su solicitud ha sido rechazada que que la venta '${folio}' no corresponde al mes de la solicitud.<h5>
             </div>`;
-            show_alert(sale.message);
+            show_alert(content);
             return false;
         }else if(sale_json.was_found && sale_json.was_found == 'invalid_month'){
             global_sale = sale_json;
