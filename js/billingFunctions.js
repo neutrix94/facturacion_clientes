@@ -75,18 +75,13 @@ var global_sale = null, global_costumer = null;
             show_alert( `<div class="text-center">
                 <h2 class="text-center text-danger">La venta '${folio}' no fue encontrada, 
                 verifica y vuelve a intentar; si el problema continua envia una captura de pantalla</h2>
-                <br>
-                <button
-                    type="button"
-                    class="btn btn-warning"
-                    onclick="close_alert();"
-                >
-                    <i class="icon-cancel-circled">Cerrar/i>
-                </button>
-                <br>
             </div>` );
             return false;
         }else if( sale_json.was_found && sale_json.was_found == 'invalid_month' ){
+            var content = `<div class="text-center">
+                <h3 class=\"text-center\"><b>Lo sentimos</b></h3>
+                <h5>Su solicitud ha sido rechazada que que la venta '${folio}' no corresponde al mes de la solicitud.<h5>
+            </div>`;
             show_alert(sale.message);
             return false;
         }else if(sale_json.was_found && sale_json.was_found == 'invalid_month'){
