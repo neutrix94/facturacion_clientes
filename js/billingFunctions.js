@@ -10,10 +10,10 @@ var global_sale = null, global_costumer = null;
             return false;
         }
         var url = "php/routes.php?action=getClient&rfc=" + rfc;
-        var resp = ajaxR( url );//alert(resp);
+        var resp = ajaxR( url );alert(resp);
         var costumer_json = JSON.parse( resp );
         if( ! costumer_json.was_found || costumer_json.was_found == 'no' ){
-            show_alert( '<h2 class="text-center text-danger">El cliente no fue encontrado, se tiene que dar de alta en el siguienete enlace : </h2>' );
+            show_alert( '<h2 class="text-center text-danger">El cliente no fue encontrado, se tiene que dar de alta en el siguiente enlace : </h2>' );
         }else{
             global_costumer = costumer_json;
             setCostumer( costumer_json );
@@ -72,9 +72,24 @@ var global_sale = null, global_costumer = null;
         var resp = ajaxR( url );//alert(resp);
         var sale_json = JSON.parse( resp );
         if( ! sale_json.was_found || sale_json.was_found == 'no' ){
-            show_alert( `<h2 class="text-center text-danger">La venta  no fue encontrada, 
-                verifica y vuelve a intentar; si el problema continua envia una captura de pantalla</h2>` );
-        }else{
+            show_alert( `<div class="text-center">
+                <h2 class="text-center text-danger">La venta '${folio}' no fue encontrada, 
+                verifica y vuelve a intentar; si el problema continua envia una captura de pantalla</h2>
+                <br>
+                <button
+                    type="button"
+                    class="btn btn-warning"
+                    onclick="close_alert();"
+                >
+                    <i class="icon-cancel-circled">Cerrar/i>
+                </button>
+                <br>
+            </div>` );
+            return false;
+        }else if( sale_json.was_found && sale_json.was_found == 'invalid_month' ){
+            show_alert(sale.message);
+            return false;
+        }else if(sale_json.was_found && sale_json.was_found == 'invalid_month'){
             global_sale = sale_json;
             setSale( sale_json );
             setTimeout( function(){
