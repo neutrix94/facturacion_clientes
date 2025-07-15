@@ -69,22 +69,22 @@ var global_sale = null, global_costumer = null;
         }
         var folio = $( '#sale_folio' ).val().trim();
         var url = "php/routes.php?action=getSale&sale_folio=" + folio;
-        var resp = ajaxR( url );//alert(resp);
+        var resp = ajaxR( url );alert(resp);
         var sale_json = JSON.parse( resp );
         if( ! sale_json.was_found || sale_json.was_found == 'no' ){
             show_alert( `<div class="text-center">
                 <h2 class="text-center text-danger">La venta '${folio}' no fue encontrada, 
                 verifica y vuelve a intentar; si el problema continua envia una captura de pantalla</h2>
             </div>` );
-            return false;
+            //return false;
         }else if( sale_json.was_found && sale_json.was_found == 'invalid_month' ){
             var content = `<div class="text-center">
                 <h3 class=\"text-center\"><b>Lo sentimos</b></h3>
-                <h5>Su solicitud ha sido rechazada que que la venta '${folio}' no corresponde al mes de la solicitud.<h5>
+                <h5>Su solicitud ha sido rechazada ya que la venta '${folio}' no corresponde al mes de la solicitud.<h5>
             </div>`;
             show_alert(content);
-            return false;
-        }else if(sale_json.was_found && sale_json.was_found == 'invalid_month'){
+            //return false;
+        }else if(sale_json.was_found && sale_json.was_found == 'yes'){
             global_sale = sale_json;
             setSale( sale_json );
             setTimeout( function(){
