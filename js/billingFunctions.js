@@ -69,7 +69,7 @@ var global_sale = null, global_costumer = null;
         }
         var folio = $( '#sale_folio' ).val().trim();
         var url = "php/routes.php?action=getSale&sale_folio=" + folio;
-        var resp = ajaxR( url );alert(resp);
+        var resp = ajaxR( url );//alert(resp);
         var sale_json = JSON.parse( resp );
         if( ! sale_json.was_found || sale_json.was_found == 'no' ){
             show_alert( `<div class="text-center">
