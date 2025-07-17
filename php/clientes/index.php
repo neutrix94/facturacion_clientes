@@ -31,7 +31,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Generador de URLs con QR</title>
+    <title>Alta Clientes</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null" href="library/milligram.min.css">
@@ -43,6 +43,7 @@
 	<script type="text/javascript" src="../../../<?php echo "{$admin_fact_dir}";?>/css/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="js/contacts.js"></script>
 	<script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/pdf_to_image.js"></script>
 </head>
 <body>
 
@@ -72,7 +73,7 @@
 	<div class="emergent" style="display: none;">
 		<div class="row">
 			<div class="col-12 emergent_content" tabindex="1">
-				<h2 class="icon-ok-circled text-success">Token valido</h2>
+				<!--h2 class="icon-ok-circled text-success">Token valido</h2>
 				<h2 class="text-warning icon-warning text-center"><i></i>Importante</h2>
 				<ul>
 					<li class="icon-right-big" style="list-style : none; padding : 10px;">Este token caduca en "X" tiempo</li>
@@ -91,14 +92,36 @@
 						</button>
 						<br><br>
 					</div>
-				</div>
+				</div-->
 			</div>
 		</div>
 	</div>
 
-	<h2 class="text-center bg-danger text-light" 
-		style="position : sticky; top : 0 !important; padding : 10px; z-index: 100;">Alta de clientes Público (Cliente se da de alta)</h2>
+	<!--h2 class="text-center bg-danger text-light" 
+		style="position : sticky; top : 0 !important; padding : 10px; z-index: 100;">Alta de clientes Público (Cliente se da de alta)</h2-->
 	<div class="row text-center" style="padding : 20px;">
+<!-- Implementacion Oscar 2025-07-15 para subir imagen / pdf de cedula fiscal -->
+		<div class="row border" id="converter_container">
+			<div class="col-6 text-center p-1">
+				<button
+					type="button"
+					class="btn btn-warning"
+					onclick="show_upload_picture_form();"
+				>
+					<i class="icon-camera">Subir imágen</i>
+				</button>
+			</div>
+			<div class="col-6 text-center p-1">
+				<button
+					type="button"
+					class="btn btn-warning"
+					onclick="show_upload_pdf_form();"
+				>
+					<i class="icon-file-pdf">Subir PDF</i>
+				</button>
+			</div>
+		</div>
+<!--  -->
 		<label class="text-start">Buscador por RFC</label>
 		<div class="input-group">
 			<input type="text" id="rfc_seeker" onkeyup="check_if_exists_costumer( event );" class="form-control">
@@ -129,14 +152,14 @@
 		<h2>Razon Social</h2>
 		<hr>
 		<div class="row">
-			<!--button
+			<button
 				class="btn btn-info"
 				onclick="enable_scann_camera();"
 			>
 				<i class="icon-qrcode">Escanear Cedula Fiscal</i>
-			</button-->
+			</button>
 			<?php
-				include( 'reader.php' );
+				//require_once( 'reader.php' );
 			?>
 		</div>	
 		<div class="col-sm-6">

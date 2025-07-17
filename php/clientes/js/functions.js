@@ -398,6 +398,7 @@
 				$( '.emergent_content' ).html( content );
 				$( '.emergent' ).css( "display", "block" );
 				alert_scann( 'new_costumer_with_constance' );
+				$('#converter_container').css("display", "none");
 			}else{
 				var content = `<div class="row">
 					<h2 class="text-center text-warning">El rfc ${rfc} no esta registrado, captura los datos del cliente!</h2>
@@ -422,6 +423,7 @@
 					$( this ).css( 'display', 'block' );
 				});
 				alert_scann( 'new_costumer_without_constance' );
+				$('#converter_container').css("display", "none");
 			}
 		}else{
 			var costumer = JSON.parse( resp[1].trim() );
@@ -527,13 +529,30 @@
 	}
 
 	function enable_scann_camera(){
-		//$.ajax({
-		//	type : "post",
-		//	url : "reader.php",
-		//	cache : false,
-		//	success : function( dat ){
-				$( '.emergent_content' ).load( "reader.php" );
-				$( '.emergent' ).css( 'display', '' );
-		//	}
-		//});
+		/*$.ajax({
+			type : "post",
+			url : "reader2.php",
+			cache : false,
+			success : function( dat ){
+				//$( '.emergent_content' ).load( "reader2.php" );
+				$( '.emergent_content' ).html( dat );
+				$( '.emergent' ).css( 'display', 'block' );
+			}
+		});*/
+
+		$( '.emergent_content' ).load( "reader2.php" );
+		$( '.emergent' ).css( 'display', 'block' );
 	}
+
+	function ajaxR( url ){
+        if(window.ActiveXObject){       
+            var httpObj = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        else if (window.XMLHttpRequest)
+        {       
+            var httpObj = new XMLHttpRequest(); 
+        }
+        httpObj.open("POST", url , false, "", "");
+        httpObj.send(null);
+        return httpObj.responseText;
+    }
