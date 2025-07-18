@@ -99,48 +99,68 @@
 
 	<!--h2 class="text-center bg-danger text-light" 
 		style="position : sticky; top : 0 !important; padding : 10px; z-index: 100;">Alta de clientes Público (Cliente se da de alta)</h2-->
-	<div class="row text-center" style="padding : 20px;">
+	<div class="row text-center" style="padding : 10px; margin-left : 12px;">
 <!-- Implementacion Oscar 2025-07-15 para subir imagen / pdf de cedula fiscal -->
-		<div class="row border" id="converter_container">
-			<div class="col-6 text-center p-1">
+		<div class="row" id="converter_container">
+			<div class="col-4 text-center p-1">
 				<button
 					type="button"
-					class="btn btn-warning"
+					class="btn border-info form-control"
+					style="font-size : 70%;"
 					onclick="show_upload_picture_form();"
 				>
-					<i class="icon-camera">Subir imágen</i>
+					<i class="icon-camera"></i>
+					<br>
+					<i>Imágen</i>
 				</button>
 			</div>
-			<div class="col-6 text-center p-1">
+			<div class="col-4 text-center p-1">
 				<button
 					type="button"
-					class="btn btn-warning"
+					class="btn border-danger text-danger form-control"
+					style="font-size : 70%;"
 					onclick="show_upload_pdf_form();"
 				>
-					<i class="icon-file-pdf">Subir PDF</i>
+					<i class="icon-file-pdf"></i>
+					<br>
+					<i>PDF</i>
+				</button>
+			</div>
+			<div class="col-4 text-center p-1">
+				<button
+					class="btn border-dark form-control"
+					onclick="enable_scann_camera();"
+					style="font-size : 70%;"
+				>
+					<i class="icon-qrcode"></i>
+					<br>
+					<i>Escanear</i>
+				</button>
+			</div>	
+		</div>
+<!-- <label class="text-start">Buscador por RFC</label> -->
+		
+		<div class="row mt-2">
+			<div class="input-group">
+				<input type="text" id="rfc_seeker" onkeyup="check_if_exists_costumer( event );" class="form-control border-dark" placeholder="Buscador por RFC">
+				<button
+					class="btn border-dark"
+					onclick="check_if_exists_costumer( 'intro' );"
+				>
+					<i class="icon-search"></i>
 				</button>
 			</div>
 		</div>
-<!--  -->
-		<label class="text-start">Buscador por RFC</label>
-		<div class="input-group">
-			<input type="text" id="rfc_seeker" onkeyup="check_if_exists_costumer( event );" class="form-control">
-			<button
-				class="btn btn-primary"
-				onclick="check_if_exists_costumer( 'intro' );"
-			>
-				<i class="icon-search"></i>
-			</button>
-		</div>
+
 		<div id="social_reason_container" class="row"></div>
-		<div class="row">
+		<div class="row mb-1">
 		<!--accordion-->
 			<div id="accordion" id="accordionExample">
 			</div>
 		<!-- fin de acordion -->
-			<div class="row text-center">
+			<div class="text-center mt-1 mb-1">
 				<button
-					class="btn btn-success"
+					class="btn border-success text-success form-control"
 					onclick="add_contact_form();"
 				>
 					<i class="icon-plus">Agregar contacto</i>
@@ -151,17 +171,6 @@
 		<hr>
 		<h2>Razon Social</h2>
 		<hr>
-		<div class="row">
-			<button
-				class="btn btn-info"
-				onclick="enable_scann_camera();"
-			>
-				<i class="icon-qrcode">Escanear Cedula Fiscal</i>
-			</button>
-			<?php
-				//require_once( 'reader.php' );
-			?>
-		</div>	
 		<div class="col-sm-6">
 			RFC <span class="text-danger">*</span>
 			<input type="text" id="rfc_input" class="form-control" onblur="changeToUpperCase( this );">
@@ -251,8 +260,7 @@
 		<div class="col-lg-6">
 			Folio Único
 				<input type="text" id="costumer_unique_folio" class="form-control" value="" disabled>
-			<br><br>
-			<br><br>
+			<br>
 		</div>
 		<div class="col-lg-6">
 			Id Cliente : 
@@ -261,31 +269,24 @@
 			<br><br>
 		</div>
 	</div>
-	<div class="row text-center bg-primary" style="text-align : center;position : fixed; bottom : 0; width : 100%; left : 0; padding : 10px;">
-		<div class="col-3">
+<!--footer-->
+	<div class="row text-center bg-white" style="text-align : center;position : sticky; bottom : 2px; width : 100%; left : 0; padding : 10px;left :12px;">
+		<div class="col-6">
 			<button
-				class="btn btn-light"
+				class="btn border-dark form-control"
 				type="button"
-				onclick="if( confirm( 'Salir al panel?' ) ){ location.href = '../../index.php?'}"
+				onclick="if( confirm( 'Salir a facturación?' ) ){ location.href = '../../index.php?'}"
 			>
-				<i class="icon-home-1"></i>
+				<i class="icon-left-open" style="font-size : 70%;">Solicitar Factura</i>
 			</button>
 		</div>
 		<div class="col-6 text-center" style="text-align : center !important;">
 			<button
 				type="button"
-				class="btn btn-success form-control"
+				class="btn border-success form-control text-success"
 				onclick="save_costumer();"
 			>
-				<i class="icon-floppy">Guardar</i>
-			</button>
-		</div><div class="col-3">
-			<button
-				class="btn btn-light"
-				type="button"
-				onclick="alert( 'Proximamente...' );"
-			>
-				<i class="icon-help-1"></i>
+				<i class="icon-floppy" style="font-size : 70%;">Guardar</i>
 			</button>
 		</div>
 	</div>
