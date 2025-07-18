@@ -290,5 +290,11 @@
 			</button>
 		</div>
 	</div>
+	<div class="hidden">
+	<?php
+		include('./getTaxDataByQr.php');
+	?>
+	</div>
+
 </body>
 </html>
