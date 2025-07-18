@@ -98,16 +98,6 @@
 						>
 					<br>
 					</div>
-					<div>
-						<button 
-							type="button"
-							class="btn btn-danger"
-							onclick="delete_contact( ${position} )"
-							${contact != null ? 'disabled' : ''} 
-						>
-							<i class="icon-canceled-circled">Eliminar</i>
-						</button>
-					</div>
 		        </div>
 		    </div>`;
 		return content;
