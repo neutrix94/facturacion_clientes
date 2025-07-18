@@ -102,12 +102,36 @@
 				$replace[] = $row;
 			}
 
+/*Validacion de contactos en pantalla de clientes
+		$contacts = explode( "|~|", $costumer_contacts );
+		foreach ($contacts as $key => $value) {
+			if( $value != '' ){
+				$contact = explode("~", $value);
+				$sql = "SELECT id_cliente_contaco FROM vf_clientes_contacto WHERE id_cliente_facturacion = ";
+				/*$contact_tmp = array(
+					"id_cliente_contacto_tmp"=>NULL,
+					"id_cliente_facturacion_tmp"=>NULL,
+					"nombre"=>"{$contact[0]}",
+					"telefono"=>"{$contact[1]}",
+					"celular"=>"{$contact[2]}",
+					"correo"=>"{$contact[3]}",
+					"uso_cfdi"=>"{$contact[4]}",
+					"id_cliente_contacto"=>( $contact[6] == '' || $contact[6] == 0 ? 0 : $contact[6] ),
+					"id_cliente_facturacion"=>( $costumer_id == '' || $costumer_id == 0 ? 0 : $costumer_id ), 
+					"system_type"=>"Alta desde sistema publico de Facturacion"
+				);
+			}
+		}*/
+
+
+
+/*fin de validacion de client*/
 			$data = file_get_contents( "../../../config/apis.json");
 			$config = json_decode($data, true);
 			$general_api_url = $config['general_api'];
 			$billing_api_url = $config['billing_api'];
 		//valida 
-			$local_path = "{$general_api_url}/rest/v1/facturaReceptor";
+			$local_path = "{$general_api_url}/rest_v2/facturacion/facturaReceptor";
 			$name = str_replace('"', '&quot;', $name );
 			
 			/*foreach ($replace as $key => $rep) {
@@ -290,7 +314,7 @@
 				$local_path = "localhost/" . base64_decode( $tmp[1] ) . "/rest/facturacion/envia_cliente";
 			}else{
 				die("No hay archivo de configuración!!!");
-			}*/
+			}*/ 
 			//die( $local_path );
 			$post_data = json_encode( array( "rows"=>$costumers ) );//costumer_json
 			$crl = curl_init( $local_path );
@@ -308,8 +332,9 @@ $resp = curl_exec($crl);//envia peticion
 			curl_close($crl);
 			//die( "HERE : {$resp}" );
 			if( $resp != "ok" ){
-				var_dump( $resp );
-				die( "Error!" );
+				die($resp);
+				//var_dump( $resp );
+				//die( "Error!" );
 			}
 			$sql = "SELECT folio_unico FROM vf_clientes_razones_sociales WHERE rfc = '{$rfc}'";
 			$stm = $this->link->query( $sql ) or die( "Error al consultar el folio unico del cliente final : {$this->link->error}" );
@@ -400,7 +425,7 @@ $resp = curl_exec($crl);//envia peticion
 					$row = $stm->fetch();
 					return "ok|" . json_encode( $row );
 				}else{
-					die( "El RFC : {$rfc} no esta registrado, captúrtalo para continuar!" );
+					die( "El RFC : {$rfc} no esta registrado, captúrtalo para continuar." );
 				}
 			}
 		}
