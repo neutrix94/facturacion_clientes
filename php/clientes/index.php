@@ -295,6 +295,28 @@
 		include('./getTaxDataByQr.php');
 	?>
 	</div>
+<?php
+	if(isset($_GET['customerRfc']) && $_GET['customerRfc'] != ''){
+		echo "<script>
+		//alert('{$_GET['customerRfc']}');
+			$('#rfc_seeker').val('{$_GET['customerRfc']}');
+			check_if_exists_costumer('intro');
+			function eliminarParametroURL(parametro) {
+			const url = new URL(window.location.href);
+			const params = new URLSearchParams(url.search);
+			params.delete(parametro);
 
+			url.search = params.toString();
+
+			// Actualiza la URL en la barra de direcciones sin recargar la página
+			window.history.pushState({}, '', url.toString());
+			}
+
+			// Ejemplo de uso:
+			// Eliminar el parámetro 'miParametro' de la URL actual.
+			eliminarParametroURL('customerRfc');
+		</script>";
+	}
+?>
 </body>
 </html>

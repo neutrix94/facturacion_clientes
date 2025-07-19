@@ -323,7 +323,14 @@
 						//$( '.emergent' ).css( 'display', 'block' );
 						//alert(dat);
 						console.log(dat);
-						var json_tmp = JSON.parse(dat);
+						var json_tmp;// = JSON.parse(dat);
+						try{
+							json_tmp = JSON.parse(dat);
+						}catch(error){
+							$( '.emergent_content' ).html( dat );
+							$( '.emergent' ).css( 'display', 'block' );
+							return false;
+						}
 						if(json_tmp.status && json_tmp.status == 'contacto_repetido'){
 							var content = `<h2>${json_tmp.message}</h2>
 								<br>
@@ -338,10 +345,10 @@
 								</div>`;
 							$( '.emergent_content' ).html( content );
 							$( '.emergent' ).css( 'display', 'block' );
-						}else{
-							$( '.emergent_content' ).html( dat );
-							$( '.emergent' ).css( 'display', 'block' );
-						}
+						}//else{
+							//$( '.emergent_content' ).html( dat );
+						//	$( '.emergent' ).css( 'display', 'block' );
+						//}
 					}, 100);
 				}
 			}

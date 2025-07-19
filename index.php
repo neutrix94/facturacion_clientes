@@ -23,74 +23,76 @@
 
         </div>
     </div>
-    <?php
-    //    echo "<input type=>";
-    ?>
-    <div class="row global">
-        <div class="row">
-            <div class="col-sm-4 text-center">
-                <img src="./img/Logo.png" width="20%">
-                Facturación de compras
-            <div class="col-sm-4 text-center"></div>
-            </div>
+
+    <div class="global p-1">
+<!--Encabezado con imagen-->
+        <div class="text-center">
+            <img src="./img/Logo.png" width="40%" class="">
+            <br>
+            <h3 class="fs-1">Facturación de compras</h3>
         </div>
+
         <div class="row">
             <div class="col-sm-1"></div>
             <div class="col-sm-10">
-                <div class="input-group">
+                <div class="input-group" id="customer_seeker_container">
                     <input type="text" class="form-control" id="costumer_rfc" 
                     onkeyup="getClientByRfc( event )"
-                    placeholder="Digita RFC">
+                    placeholder="Digite RFC">
                     <button
                         type="button"
                         id="rfc_seeker_btn"
-                        class="btn btn-warning"
+                        class="btn btn-dark"
                         onclick="getClientByRfc( 'intro' )"
                     >
                         <i class="icon-search"></i>
                     </button>
+                </div>
+                <div class="input-group hidden" id="customer_name_container">
+                    <input type="text" class="form-control" id="customer_name" 
+                    onkeyup="getClientByRfc( event )"
+                    disabled>
                     <button
                         type="button"
                         id="rfc_seeker_reset_btn"
-                        class="btn btn-danger hidden"
-                        onclick="resetBillingForm()"
+                        class="btn btn-danger"
+                        onclick="location.reload();"
                     >
                         <i class="icon-spin3"></i>
                     </button>
                 </div>
-                <div>
-                    <button
-                        class="btn btn-info form-control"
-                        onclick="location.href='php/clientes/index.php?'"
-                    >
-                        <i class="icon-user">Dar de alta nuevo cliente</i>
-                    </button>
+                <div id="contacts_global_container" class="hidden">
+                    <div class="text-center p-0 m-0">
+                        <button
+                            id="contacts_accordion_button"
+                            class="btn btn-info form-control text-center text-light"
+                            onclick="show_and_hidde_contacts_container(this);"
+                            visibility="false"
+                        >
+                            Seleccionar contacto <i id="contacts_accordion_icon" class="icon-down-open"></i>
+                        </button>
+                    </div>
+                    <div class="hidden" id="contacts_container">
+                        <table class="table table-striped table-bordered" style="font-size : 60% !important;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Nombre</th>
+                                    <th class="text-center">Correo</th>
+                                    <th class="text-center">Uso CFDI</th>
+                                    <th class="text-center">Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contacts_list"></tbody>
+                        </table>
+                    </div>
                 </div>
-                <!--div class="text-info">
-                   <p>FUNK671228PH6</p> 
-                   <p>TPM140304253</p>
-                </div-->
                 <br>
-                <div class="hidden" id="contacts_container">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Nombre</th>
-                                <th class="text-center">Correo</th>
-                                <th class="text-center">Uso CFDI</th>
-                                <th class="text-center">Seleccionar</th>
-                            </tr>
-                        </thead>
-                        <tbody id="contacts_list"></tbody>
-                    </table>
-                </div>
-                <br>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="sale_folio" 
-                    placeholder="Digita Folio Nota" onkeyup="getSaleByFolio( event );" disabled>
+                <div class="input-group hidden" id="sale_container">
+                    <input type="text" class="form-control border-dark" id="sale_folio" 
+                    placeholder="Digite Folio Nota" onkeyup="getSaleByFolio( event );" disabled>
                     <button
                         type="button"
-                        class="btn btn-primary"
+                        class="btn btn-dark"
                         id="sale_seeker_btn"
                         onclick="getSaleByFolio( 'intro' );"
                         disabled
@@ -122,7 +124,7 @@
                         <tbody id="payments_list"></tbody>
                     </table>
                 </div>
-                <div class="row" id="payment_type_container">
+                <div class="row hidden" id="payment_type_container">
                     <div class="col-sm-6">
                         <label for="payment_type">Tipo de pago</label>
                         <select id="payment_type" class="form-select">
@@ -145,6 +147,7 @@
                     >
                         <i class="icon-ok-circle">Solicitar Factura</i>
                     </button>
+                    <br><br>
                 </div>
                 <div id="download_container" class="hidden">
                     <button
@@ -158,7 +161,7 @@
                     </button>
                 </div>
                 <div id="email_container" class="hidden">
-                    <input type="email" class="form-control" placeholder="Escribe correo destino">
+                    <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
                     <button
                         type="button"
                         class="btn btn-success form-control"
@@ -181,7 +184,7 @@
         height: 100%;
         top : 0;
         width: 100%;
-        right : -5%;
+        margin-left : 2px;
        /* background-image: url("https://centroplenum.es/wp-content/uploads/2020/04/Fondo-rejilla-panal.jpg");
     */}
     .hidden{
