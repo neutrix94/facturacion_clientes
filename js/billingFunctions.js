@@ -6,14 +6,31 @@ var global_sale = null, global_costumer = null;
         }
         var rfc  = $( '#costumer_rfc' ).val().trim();
         if( rfc.length <= 0 ){ 
-            show_alert( '<h2 class="text-center text-danger">El RFC no puede ir vacio: </h2>' );
+            show_alert( '<h2 class="text-center text-danger">El RFC no puede ir vacio.</h2>' );
             return false;
         }
         var url = "php/routes.php?action=getClient&rfc=" + rfc;
-        var resp = ajaxR( url );alert(resp);
+        var resp = ajaxR( url );//alert(resp);
         var costumer_json = JSON.parse( resp );
         if( ! costumer_json.was_found || costumer_json.was_found == 'no' ){
-            show_alert( '<h2 class="text-center text-danger">El cliente no fue encontrado, se tiene que dar de alta en el siguiente enlace : </h2>' );
+            show_alert( `<div class="text-center">
+                <h2 class="text-center text-danger icon-warning">El cliente '<b>${rfc}</b>' no fue encontrado,<br>¿Desea darlo de alta? </h2>
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="location.href='php/clientes/index.php?'"
+                >
+                    <i class="icon-ok-circled">Dar de alta</i>
+                </button>
+                <br><br>
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="if(close_alert()){document.getElementById('costumer_rfc').select();}"
+                >
+                    <i class="icon-cancel-circled">Regresar</i>
+                </button>
+            </div>`, false );
         }else{
             global_costumer = costumer_json;
             setCostumer( costumer_json );
@@ -26,7 +43,11 @@ var global_sale = null, global_costumer = null;
         $( "#costumer_rfc" ).attr( 'disabled', true );
         $( "#rfc_seeker_reset_btn" ).removeClass( "hidden" );
         $( "#rfc_seeker_btn" ).addClass( "hidden" );
-        //genera vista de contactos
+
+        $('#customer_seeker_container').addClass('hidden');
+        $('#customer_name_container').removeClass('hidden');
+        $('#customer_name').val(`${costumer.costumer.costumer_name} - ${costumer.costumer.costumer_id}`);
+    //genera vista de contactos
         var count = 0;
         for (var key in costumer.contacts){
             contacts_html += `<tr>
@@ -39,27 +60,70 @@ var global_sale = null, global_costumer = null;
             </tr>`;
             count ++;
         }
+        contacts_html += `<tr>
+            <td colspan="4">
+                <button
+                    class="btn btn-warning form-control"
+                    onclick="edit_customer();"
+                >
+                    <i class="icon-plus">Actualizar o agregar contacto</i>
+                </button>
+            </td>
+        </tr>`;
         //muestra contactos
         $( '#contacts_list' ).html( `${contacts_html}` );
-        $( '#contacts_container' ).removeClass( 'hidden' );
+        $( '#contacts_global_container' ).removeClass( 'hidden' );
+        $( '#contacts_accordion_button').click();
+        //$( '#contacts_container' ).removeClass( 'hidden' );
             /*if( count == 1 ){
             setTimeout( function(){
                 $( '#contact_selected_0' ).prop( 'checked', true );
             }, 300 );*/
             //}
         //habilita buscador de nota de venta
-        $( '#sale_folio' ).removeAttr( 'disabled' );
-        $( "#sale_seeker_btn" ).removeClass( "hidden" );
-        $( "#sale_seeker_btn" ).removeAttr( "disabled" );
-        $( '#sale_folio' ).focus();
+        //$( '#sale_folio' ).removeAttr( 'disabled' );
+        //$( "#sale_seeker_btn" ).removeClass( "hidden" );
+        //$( "#sale_seeker_btn" ).removeAttr( "disabled" );
+    }
+
+    function edit_customer(){
+        var url = "php/clientes/index.php?customerRfc=" + $('#costumer_rfc').val().trim();
+        location.href = url;
     }
     
+    function show_and_hidde_contacts_container(obj){
+        var visibility = $(obj).attr("visibility");
+        if( visibility == "false" ){
+            $('#contacts_container').removeClass('hidden');
+            $(obj).attr("visibility", "true");
+            $('#contacts_accordion_icon').removeClass("icon-down-open");
+            $('#contacts_accordion_icon').addClass("icon-up-open");
+        }else{
+            $('#contacts_container').addClass('hidden');
+            $(obj).attr("visibility", "false");
+            $('#contacts_accordion_icon').removeClass("icon-up-open");
+            $('#contacts_accordion_icon').addClass("icon-down-open");
+        }
+    }
+/*    function validate_if_contact_is_selected(){
+        alert();
+    }
+*/    
     function change_cfdi_use( counter ){//alert( change_cfdi_use );
         if( $( '#contact_3_' + counter ).prop( 'checked' ) == true ){
             //alert();
             var value = $( '#contact_2_' + counter ).attr('value');//alert(value);
             var text = $( '#contact_2_' + counter ).html();
             $( '#cfdi_type' ).append( `<option value="${value}">${text}</option>` );
+        //se habilitan 
+            $( '#sale_container' ).removeClass( 'hidden' );
+            $( '#sale_folio' ).removeAttr( 'disabled' );
+            $( "#sale_seeker_btn" ).removeClass( "hidden" );
+            $( "#sale_seeker_btn" ).removeAttr( "disabled" );
+            $( '#sale_folio' ).focus();
+            if( $("#contacts_accordion_button").attr("visibility") == "true" ){
+                $("#contacts_accordion_button").click();
+            }
         }
     }
 //busqueda de venta por folio
@@ -130,6 +194,9 @@ var global_sale = null, global_costumer = null;
         $( '#payments_list' ).html( `${payments_html}` );
         $( '#payments_container' ).removeClass( 'hidden' );
         $( '#bill_container' ).css( "display", "block" );
+
+        $('#payments_container').removeClass('hidden');
+        $('#payment_type_container').removeClass('hidden');
         //valida si la venta fue facturada
         if(sale.sale.id_status_facturacion == 8){
             $( '#files_download' ).attr( "url", `${sale.sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
@@ -319,6 +386,7 @@ var global_sale = null, global_costumer = null;
     function close_alert(){
         $( '#alert_content' ).html( '' );
         $( '#alert' ).css( 'display', 'none' );
+        return true;
     }
 
     function ajaxR( url ){
@@ -339,7 +407,7 @@ var global_sale = null, global_costumer = null;
        
         <button
             type="button"
-            class="btn btn-success"
+            class="btn border-success text-success"
             onclick="close_alert();"
         >
             <i class="icon-ok-circled">Aceptar y cerrar</i>
