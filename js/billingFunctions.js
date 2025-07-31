@@ -379,7 +379,12 @@ var global_sale = null, global_costumer = null;
     }
 
     function download_and_send(files_url){
-        var content = `<div id="download_container" class="">
+        var content = `<div id="download_container" class="text-center">
+            <i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
+            <h3 class="text-success">La factura esta lista</h3>
+            <h3>
+                Los documentos de facturación electrónica están listos para su descarga y/o envió a correo electrónico.
+            </h3>
             <button
                 type="button"
                 class="btn btn-success form-control"
