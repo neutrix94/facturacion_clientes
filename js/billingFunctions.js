@@ -379,13 +379,15 @@ var global_sale = null, global_costumer = null;
     }
 
     function download_and_send(files_url){
-        var content = `<i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
-        <h3 class="text-success">La factura esta lista</h3>
-        <h3>
-            Los documentos de facturación electrónica están listos para su descarga y/o envió a correo electrónico.
-        </h3>
+        var content = `<div class="text-center>
+            <i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
+            <h2 class="text-success">La factura esta lista</h2>
+            <p>
+                Los documentos de facturación electrónica están listos para su descarga y/o envió a correo electrónico.
+            </p>
+        </div>
         <div class="row">
-            <div id="download_container" class="text-center">
+            <div id="download_container" class="col-6 p-3 text-center">
                 <button
                     type="button"
                     class="btn btn-success form-control"
@@ -396,7 +398,7 @@ var global_sale = null, global_costumer = null;
                     <i class="icon-download-cloud">Descargar archivos</i>
                 </button>
             </div>
-            <div id="email_container" class="">
+            <div id="email_container" class="col-6 p-3 text-center">
                 <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
                 <button
                     type="button"
