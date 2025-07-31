@@ -379,7 +379,7 @@ var global_sale = null, global_costumer = null;
     }
 
     function download_and_send(files_url){
-        var content = `<div class="text-center>
+        var content = `<div class="text-center">
             <i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
             <h2 class="text-success">La factura esta lista</h2>
             <p>
