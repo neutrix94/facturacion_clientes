@@ -149,28 +149,6 @@
                     </button>
                     <br><br>
                 </div>
-                <div id="download_container" class="hidden">
-                    <button
-                        type="button"
-                        class="btn btn-success form-control"
-                        id="files_download"
-                        onclick="downloadFiles();"
-                        
-                    ><!-- url="http://localhost/clucesFact2023/c2lzdGVtYXM=/casaLucesBazar/code/ajax/fElectronica/zip.php?id_venta=64277"-->
-                        <i class="icon-download-cloud">Descargar archivos</i>
-                    </button>
-                </div>
-                <div id="email_container" class="hidden">
-                    <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
-                    <button
-                        type="button"
-                        class="btn btn-success form-control"
-                        id="send_email_btn"
-                        onclick="sendEmail();"
-                    ><!--sale_folio=""-->
-                        <i class="icon-email">Enviar por Correo</i>
-                    </button>
-                </div>
             </div>
             <div class="col-sm-1"></div>
         </div>

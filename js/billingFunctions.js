@@ -199,10 +199,11 @@ var global_sale = null, global_costumer = null;
         $('#payment_type_container').removeClass('hidden');
         //valida si la venta fue facturada
         if(sale.sale.id_status_facturacion == 8){
-            $( '#files_download' ).attr( "url", `${sale.sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
-            $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
-            $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
-            $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
+            download_and_send(`${sale.sale.url_descarga_archivos_facturacion}`);
+            //$( '#files_download' ).attr( "url", `${sale.sale.url_descarga_archivos_facturacion}` );//code/ajax/fElectronica/zip.php?id_venta= + json_resp.bill_system_id
+            //$( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+            //$( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+            //$( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
             //$( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
             $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
             $( '#payment_type_container' ).css( "display", "none" );//oculta boton de facturacion
@@ -314,10 +315,11 @@ var global_sale = null, global_costumer = null;
                 content += `<h4 class="text-center text-danger">Error : ${json_resp.sub_status}</h4>`;
             }
             if( json_resp.files_url && json_resp.bill_system_id ){
-                $( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
-                $( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
-                $( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
-                $( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
+                download_and_send(`${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=${json_resp.bill_system_id}`);
+                //$( '#files_download' ).attr( "url", `${json_resp.files_url}/code/ajax/fElectronica/zip.php?id_venta=` + json_resp.bill_system_id );
+                //$( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+                //$( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+                //$( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
                 if( json_resp.status == 200 ){
                     $( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
                     $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
@@ -374,6 +376,37 @@ var global_sale = null, global_costumer = null;
     //limpia tabla de pagos
         $( '#payments_list' ).empty();
         $( "#costumer_rfc" ).focus();
+    }
+
+    function download_and_send(files_url){
+        var content = `<div id="download_container" class="">
+            <button
+                type="button"
+                class="btn btn-success form-control"
+                id="files_download"
+                onclick="downloadFiles();"
+                url="${files_url}"
+            >
+                <i class="icon-download-cloud">Descargar archivos</i>
+            </button>
+        </div>
+        <div id="email_container" class="">
+            <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
+            <button
+                type="button"
+                class="btn btn-success form-control"
+                id="send_email_btn"
+                onclick="sendEmail();"
+                sale_folio="${global_sale.sale.folio}"
+            >
+                <i class="icon-email">Enviar por Correo</i>
+            </button>
+        </div>`;
+        show_alert(content, false);
+        //$( '#files_download' ).attr( "url", `${files_url}` );
+        //$( '#download_container' ).removeClass( 'hidden' );//hace visible boton para descargar archivos
+        //$( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
+        //$( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
     }
 
     function show_alert( message, close_btn = true ){
