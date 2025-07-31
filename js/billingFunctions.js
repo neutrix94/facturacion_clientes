@@ -379,28 +379,35 @@ var global_sale = null, global_costumer = null;
     }
 
     function download_and_send(files_url){
-        var content = `<div id="download_container" class="">
-            <button
-                type="button"
-                class="btn btn-success form-control"
-                id="files_download"
-                onclick="downloadFiles();"
-                url="${files_url}"
-            >
-                <i class="icon-download-cloud">Descargar archivos</i>
-            </button>
-        </div>
-        <div id="email_container" class="">
-            <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
-            <button
-                type="button"
-                class="btn btn-success form-control"
-                id="send_email_btn"
-                onclick="sendEmail();"
-                sale_folio="${global_sale.sale.folio}"
-            >
-                <i class="icon-email">Enviar por Correo</i>
-            </button>
+        var content = `<i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
+        <h3 class="text-success">La factura esta lista</h3>
+        <h3>
+            Los documentos de facturación electrónica están listos para su descarga y/o envió a correo electrónico.
+        </h3>
+        <div class="row">
+            <div id="download_container" class="text-center">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    id="files_download"
+                    onclick="downloadFiles();"
+                    url="${files_url}"
+                >
+                    <i class="icon-download-cloud">Descargar archivos</i>
+                </button>
+            </div>
+            <div id="email_container" class="">
+                <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    id="send_email_btn"
+                    onclick="sendEmail();"
+                    sale_folio="${global_sale.sale.folio}"
+                >
+                    <i class="icon-email">Enviar por Correo</i>
+                </button>
+            </div>
         </div>`;
         show_alert(content, false);
         //$( '#files_download' ).attr( "url", `${files_url}` );
