@@ -1,6 +1,15 @@
 
     function show_upload_pdf_form(){
         var content = `<div class="text-center">
+            <div class="text-end">
+                <button
+                    type="button"
+                    class="btn mr-4"
+                    onclick="close_emergent();"
+                >
+                    <b class="text-danger fs-6">X</b>
+                </button>
+            </div>
             <form enctype="multipart/form-data">
                 <div class="text-center p-3">
                     <input type="file" id="form_pdf_input" name="pdf" accept="application/pdf" onchange="validarTamano(this)" style="display:none;" required>
@@ -40,6 +49,15 @@
 
     function show_upload_picture_form(){
         var content = `<div class="text-center">
+            <div class="text-end">
+                <button
+                    type="button"
+                    class="btn mr-4"
+                    onclick="close_emergent();"
+                >
+                    <b class="text-danger">X</b>
+                </button>
+            </div>
             <form enctype="multipart/form-data">
                 <div class="text-center p-3">
                     <input type="file" id="form_img_input" name="pdf" accept="image/*" required class="btn btn-warning" onchange="mostrarImagen(event)" style="display:none;" required>
