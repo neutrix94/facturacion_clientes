@@ -324,8 +324,9 @@ var global_sale = null, global_costumer = null;
                     $( '#bill_container' ).addClass( "hidden" );//oculta boton de facturacion
                     $( '#bill_container' ).css( "display", "none" );//oculta boton de facturacion
                 }
+            }else{
+                show_alert( content );//+ resp
             }
-            show_alert( content );//+ resp
         }, 1000 );
     }
 
