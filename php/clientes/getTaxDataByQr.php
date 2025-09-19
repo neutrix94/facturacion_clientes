@@ -184,7 +184,7 @@
 		$( "#regime_input" ).children( 'option' ).each( function( index ){
 			if( index > 0 ){
 				if( ! costumer_regimes.includes( $( this ).text() ) ){
-					$( this ).css( 'display', 'none' );
+					//$( this ).css( 'display', 'none' );//deshabilitado por Oscar 2025-09-19 para mostrar todo el catalogo de regimenes fiscales
 				}else{
 					matches ++;
 					if( costumer_regimes.length == 2 ){
