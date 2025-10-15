@@ -358,7 +358,11 @@ var global_sale = null, global_costumer = null;
 
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
+        var custom_email = $('#custom_email').val().trim();
         var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
+        if(custom_email.length > 0){
+            url += `&custom_email=${custom_email}`;
+        }
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
@@ -417,7 +421,6 @@ var global_sale = null, global_costumer = null;
                 </button>
             </div>
             <div id="email_container" class="col-6 p-3 text-center">
-                <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
                 <button
                     type="button"
                     class="btn btn-success form-control"
@@ -427,6 +430,8 @@ var global_sale = null, global_costumer = null;
                 >
                     <i class="icon-email">Enviar por Correo</i>
                 </button>
+                
+                <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional*)">
             </div>
         </div>`;
         show_alert(content, false);
