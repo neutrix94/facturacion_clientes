@@ -358,7 +358,11 @@ var global_sale = null, global_costumer = null;
 
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
+        var custom_email = $('#custom_email').val().trim();
         var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
+        if(custom_email.length > 0){
+            url += `&custom_email=${custom_email}`;
+        }
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
@@ -413,11 +417,10 @@ var global_sale = null, global_costumer = null;
                     onclick="downloadFiles();"
                     url="${files_url}"
                 >
-                    <i class="icon-download-cloud">Descargar archivos</i>
+                    <i class="icon-download-cloud">Descargar archivos (comprimido)</i>
                 </button>
             </div>
             <div id="email_container" class="col-6 p-3 text-center">
-                <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
                 <button
                     type="button"
                     class="btn btn-success form-control"
@@ -425,7 +428,19 @@ var global_sale = null, global_costumer = null;
                     onclick="sendEmail();"
                     sale_folio="${global_sale.sale.folio}"
                 >
-                    <i class="icon-email">Enviar por Correo</i>
+                    <i class="icon-email">Enviar a Correo de Contacto</i>
+                </button>
+            </div>
+            <div class="col-12">
+                <h4>Escribe aqui el correo destino (opcional)</h4>
+                <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
+                <br>
+                <button
+                    type="btn btn-success form-control"
+                    onclick="sendEmail();"
+                    sale_folio="${global_sale.sale.folio}"
+                >
+                    Enviar a este correo
                 </button>
             </div>
         </div>`;
