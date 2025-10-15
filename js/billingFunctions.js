@@ -417,7 +417,7 @@ var global_sale = null, global_costumer = null;
                     onclick="downloadFiles();"
                     url="${files_url}"
                 >
-                    <i class="icon-download-cloud">Descargar archivos</i>
+                    <i class="icon-download-cloud">Descargar archivos (comprimido)</i>
                 </button>
             </div>
             <div id="email_container" class="col-6 p-3 text-center">
@@ -428,10 +428,20 @@ var global_sale = null, global_costumer = null;
                     onclick="sendEmail();"
                     sale_folio="${global_sale.sale.folio}"
                 >
-                    <i class="icon-email">Enviar por Correo</i>
+                    <i class="icon-email">Enviar a Correo de Contacto</i>
                 </button>
-                
-                <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional*)">
+            </div>
+            <div class="col-12">
+                <h4>Escribe aqui el correo destino (opcional)</h4>
+                <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
+                <br>
+                <button
+                    type="btn btn-success form-control"
+                    onclick="sendEmail();"
+                    sale_folio="${global_sale.sale.folio}"
+                >
+                    Enviar a este correo
+                </button>
             </div>
         </div>`;
         show_alert(content, false);
