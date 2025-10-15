@@ -330,13 +330,30 @@ var global_sale = null, global_costumer = null;
         }, 1000 );
     }
 
-    function downloadFiles(){
+    /*function downloadFiles(){
         var url = $('#files_download').attr( "url" );
         var ventana = window.open(url, '_blank');
         setTimeout(function(){
             ventana.close();
             location.reload();
         },2000);
+    }*/
+
+    function downloadFiles() {
+        //const url = 'ruta/a/tu/archivo.ext'; // Aquí pones la URL del archivo que deseas descargar
+        var url = $('#files_download').attr( "url" );
+        const nombreArchivo = 'factura_comprimida.zip'; // Nombre con el que deseas guardar el archivo
+        // Crea un enlace temporal
+        const enlace = document.createElement('a');
+        enlace.href = url;
+        enlace.download = nombreArchivo; // El atributo 'download' sugiere el nombre para guardar el archivo
+
+        // Agrega el enlace al DOM y simula un clic
+        document.body.appendChild(enlace);
+        enlace.click();
+
+        // Elimina el enlace después de la descarga
+        document.body.removeChild(enlace);
     }
 
     function sendEmail(){
