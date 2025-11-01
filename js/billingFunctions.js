@@ -378,6 +378,7 @@ var global_sale = null, global_costumer = null;
         $( '#payments_list' ).empty();
         $( "#costumer_rfc" ).focus();
     }
+
     
     function download_and_send(files_url){
         var content = `<div class="text-center">
@@ -452,7 +453,7 @@ var global_sale = null, global_costumer = null;
         //$( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
         //$( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
     }
-
+    
     function show_alert( message, close_btn = true ){
         var content = message;
         content += ( close_btn ? close_btn_html : `` );
@@ -490,3 +491,4 @@ var global_sale = null, global_costumer = null;
             <i class="icon-ok-circled">Aceptar y cerrar</i>
         </button>
     </div>`;
+
