@@ -330,18 +330,38 @@ var global_sale = null, global_costumer = null;
         }, 1000 );
     }
 
-    function downloadFiles(){
+    function downloadFiles(type) {
+        //const url = 'ruta/a/tu/archivo.ext'; // Aquí pones la URL del archivo que deseas descargar
         var url = $('#files_download').attr( "url" );
-        var ventana = window.open(url, '_blank');
-        setTimeout(function(){
-            ventana.close();
-            location.reload();
-        },2000);
-    }
+        let nombreArchivo = 'factura_comprimida.zip'; // Nombre con el que deseas guardar el archivo
+        if(type == 'pdf'){
+            url = url.replace('zip.php?', 'pdf_download.php?');
+            nombreArchivo = "factura.pdf";
+        }else if(type == 'xml'){
+            url = url.replace('zip.php?', 'xml_download.php?');
+            nombreArchivo = "factura.xml";
+        }
+        
+        // Crea un enlace temporal
+        let enlace = document.createElement('a');
+        enlace.href = url;
+        enlace.download = nombreArchivo; // El atributo 'download' sugiere el nombre para guardar el archivo
 
+        // Agrega el enlace al DOM y simula un clic
+        document.body.appendChild(enlace);
+        enlace.click();
+
+        // Elimina el enlace después de la descarga
+        document.body.removeChild(enlace);
+    }
+    
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
+        var custom_email = $('#custom_email').val().trim();
         var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
+        if(custom_email.length > 0){
+            url += `&custom_email=${custom_email}`;
+        }
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
@@ -434,12 +454,13 @@ var global_sale = null, global_costumer = null;
                 </button>
             </div>
             <div class="col-12">
-            <p class="text-center text-red">NOTA : POR EL MOMENTO NO SE PUEDEN ENVIAR CORREOS A GMAIL</p>
+            <p class="text-center text-danger">NOTA : POR EL MOMENTO NO SE PUEDEN ENVIAR CORREOS A GMAIL</p>
                 <h4>Escribe aqui el correo destino (opcional)</h4>
                 <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
                 <br>
                 <button
-                    type="btn btn-success form-control"
+                    type="button"
+                    class="btn btn-success form-control"
                     onclick="sendEmail();"
                     sale_folio="${global_sale.sale.folio}"
                 >

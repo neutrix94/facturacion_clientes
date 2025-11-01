@@ -1,5 +1,7 @@
 <?php
-/*Version 1.0 Verificado por Oscar 2024-10-30*/
+/*Version 1.0 Verificado por Oscar 2024-10-30
+Version correo personalizado
+*/
     if( isset( $_POST['action'] ) || isset( $_GET['action'] ) ){
         $Routes = new Routes();
         $action = ( isset( $_POST['action'] ) ? $_POST['action'] : $_GET['action'] );
