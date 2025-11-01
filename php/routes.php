@@ -1,5 +1,7 @@
 <?php
-/*Version 1.0 Verificado por Oscar 2024-10-30*/
+/*Version 1.0 Verificado por Oscar 2024-10-30
+Version correo personalizado
+*/
     if( isset( $_POST['action'] ) || isset( $_GET['action'] ) ){
         $Routes = new Routes();
         $action = ( isset( $_POST['action'] ) ? $_POST['action'] : $_GET['action'] );
@@ -45,7 +47,8 @@
 
             case 'sendEmail' : 
                 $sale_folio = ( isset( $_POST['sale_folio'] ) ? $_POST['sale_folio'] : $_GET['sale_folio'] );
-                $post_data = json_encode( array( "sale_folio"=>$sale_folio ) );
+                $custom_email = ( isset( $_POST['custom_email'] ) ? $_POST['custom_email'] : (isset( $_GET['custom_email'] ) ? $_GET['custom_email'] : "") );
+                $post_data = json_encode( array( "sale_folio"=>$sale_folio, "custom_email"=>"{$custom_email}" ) );
                 $url = $Routes->getPath( 'billing_api' );
 //error_log("URL CORREO : {$url}/rest/envia_factura_correo");
                 echo $Routes->sendPetition( "{$url}/rest/envia_factura_correo", $post_data );

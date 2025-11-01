@@ -330,18 +330,38 @@ var global_sale = null, global_costumer = null;
         }, 1000 );
     }
 
-    function downloadFiles(){
+    function downloadFiles(type) {
+        //const url = 'ruta/a/tu/archivo.ext'; // Aquí pones la URL del archivo que deseas descargar
         var url = $('#files_download').attr( "url" );
-        var ventana = window.open(url, '_blank');
-        setTimeout(function(){
-            ventana.close();
-            location.reload();
-        },2000);
-    }
+        let nombreArchivo = 'factura_comprimida.zip'; // Nombre con el que deseas guardar el archivo
+        if(type == 'pdf'){
+            url = url.replace('zip.php?', 'pdf_download.php?');
+            nombreArchivo = "factura.pdf";
+        }else if(type == 'xml'){
+            url = url.replace('zip.php?', 'xml_download.php?');
+            nombreArchivo = "factura.xml";
+        }
+        
+        // Crea un enlace temporal
+        let enlace = document.createElement('a');
+        enlace.href = url;
+        enlace.download = nombreArchivo; // El atributo 'download' sugiere el nombre para guardar el archivo
 
+        // Agrega el enlace al DOM y simula un clic
+        document.body.appendChild(enlace);
+        enlace.click();
+
+        // Elimina el enlace después de la descarga
+        document.body.removeChild(enlace);
+    }
+    
     function sendEmail(){
         var sale_folio = $( '#send_email_btn' ).attr( 'sale_folio' );
+        var custom_email = $('#custom_email').val().trim();
         var url = `php/routes.php?action=sendEmail&sale_folio=${sale_folio}`;//alert(url);
+        if(custom_email.length > 0){
+            url += `&custom_email=${custom_email}`;
+        }
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
@@ -379,6 +399,7 @@ var global_sale = null, global_costumer = null;
         $( "#costumer_rfc" ).focus();
     }
 
+    
     function download_and_send(files_url){
         var content = `<div class="text-center">
             <i class="icon-ok-circled text-success" style="font-size : 300%;"></i>
@@ -392,15 +413,36 @@ var global_sale = null, global_costumer = null;
                 <button
                     type="button"
                     class="btn btn-success form-control"
-                    id="files_download"
-                    onclick="downloadFiles();"
+                    id="files_download_xml_btn"
+                    onclick="downloadFiles('xml');"
                     url="${files_url}"
                 >
-                    <i class="icon-download-cloud">Descargar archivos</i>
+                    <i class="icon-download-cloud">Descargar XML</i>
+                </button>
+            </div>
+            <div id="download_container" class="col-6 p-3 text-center">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    id="files_download_pdf_btn"
+                    onclick="downloadFiles('pdf');"
+                    url="${files_url}"
+                >
+                    <i class="icon-download-cloud">Descargar PDF</i>
+                </button>
+            </div>
+            <div id="download_container" class="col-6 p-3 text-center">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    id="files_download"
+                    onclick="downloadFiles('zip');"
+                    url="${files_url}"
+                >
+                    <i class="icon-download-cloud">Descargar archivos (comprimido)</i>
                 </button>
             </div>
             <div id="email_container" class="col-6 p-3 text-center">
-                <input type="email" class="form-control" placeholder="Escribe correo destino" style="display:none;">
                 <button
                     type="button"
                     class="btn btn-success form-control"
@@ -408,7 +450,21 @@ var global_sale = null, global_costumer = null;
                     onclick="sendEmail();"
                     sale_folio="${global_sale.sale.folio}"
                 >
-                    <i class="icon-email">Enviar por Correo</i>
+                    <i class="icon-email">Enviar a Correo de Contacto</i>
+                </button>
+            </div>
+            <div class="col-12">
+            <p class="text-center text-danger">NOTA : POR EL MOMENTO NO SE PUEDEN ENVIAR CORREOS A GMAIL</p>
+                <h4>Escribe aqui el correo destino (opcional)</h4>
+                <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
+                <br>
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    onclick="sendEmail();"
+                    sale_folio="${global_sale.sale.folio}"
+                >
+                    Enviar a este correo
                 </button>
             </div>
         </div>`;
@@ -418,7 +474,7 @@ var global_sale = null, global_costumer = null;
         //$( '#send_email_btn' ).attr( "sale_folio", `${global_sale.sale.folio}` );
         //$( '#email_container' ).removeClass( 'hidden' );//hace visible boton para enviar correo
     }
-
+    
     function show_alert( message, close_btn = true ){
         var content = message;
         content += ( close_btn ? close_btn_html : `` );
