@@ -461,6 +461,7 @@ var global_sale = null, global_costumer = null;
                 </button>
             </div>
             <div class="col-12">
+                <p class="text-center text-red">NOTA : POR EL MOMENTO NO SE PUEDEN ENVIAR CORREOS A GMAIL</p>
                 <h4>Escribe aqui el correo destino (opcional)</h4>
                 <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
                 <br>
