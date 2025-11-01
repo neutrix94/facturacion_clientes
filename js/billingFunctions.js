@@ -339,13 +339,20 @@ var global_sale = null, global_costumer = null;
         },2000);
     }*/
 
-    function downloadFiles() {
+    function downloadFiles(type) {
         //const url = 'ruta/a/tu/archivo.ext'; // Aquí pones la URL del archivo que deseas descargar
         var url = $('#files_download').attr( "url" );
         const nombreArchivo = 'factura_comprimida.zip'; // Nombre con el que deseas guardar el archivo
         // Crea un enlace temporal
         const enlace = document.createElement('a');
         enlace.href = url;
+        if(type == 'pdf'){
+            url = url.replace('zip.php?', 'pdf_download.php?');
+            nombreArchivo = "factura.pdf";
+        }else if(type == 'xml'){
+            url = url.replace('zip.php?', 'xml_download.php?');
+            nombreArchivo = "factura.xml";
+        }
         enlace.download = nombreArchivo; // El atributo 'download' sugiere el nombre para guardar el archivo
 
         // Agrega el enlace al DOM y simula un clic
@@ -413,8 +420,30 @@ var global_sale = null, global_costumer = null;
                 <button
                     type="button"
                     class="btn btn-success form-control"
+                    id="files_download_xml_btn"
+                    onclick="downloadFiles('xml');"
+                    url="${files_url}"
+                >
+                    <i class="icon-download-cloud">Descargar XML</i>
+                </button>
+            </div>
+            <div id="download_container" class="col-6 p-3 text-center">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
+                    id="files_download_pdf_btn"
+                    onclick="downloadFiles('pdf');"
+                    url="${files_url}"
+                >
+                    <i class="icon-download-cloud">Descargar PDF</i>
+                </button>
+            </div>
+            <div id="download_container" class="col-6 p-3 text-center">
+                <button
+                    type="button"
+                    class="btn btn-success form-control"
                     id="files_download"
-                    onclick="downloadFiles();"
+                    onclick="downloadFiles('zip');"
                     url="${files_url}"
                 >
                     <i class="icon-download-cloud">Descargar archivos (comprimido)</i>
