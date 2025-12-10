@@ -266,7 +266,12 @@ var global_sale = null, global_costumer = null;
         }else{
             var url = `php/routes.php?action=updatePaymentSubtype&payment_id=${payment_id}&payment_subtype=${payment_subtype}`;
             var resp = ajaxR( url );
-            alert( resp );
+            var json_decode = JSON.parse(resp);
+            if( json_decode.status && (json_decode.status == "200" || json_decode.status == 200) ){
+                setFinalPaymentType();
+            }else{
+                alert("Error : " + resp);
+            }
         }
 
     }
