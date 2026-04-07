@@ -305,7 +305,7 @@ var global_sale = null, global_costumer = null;
                 alert( "El tipo de pago es requerido." );
                 return false;
             }
-            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
+            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=` + encodeURIComponent(costumer) + `&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
 //alert(url);
             var resp = ajaxR( url );
 //alert( resp );
