@@ -9,7 +9,7 @@ var global_sale = null, global_costumer = null;
             show_alert( '<h2 class="text-center text-danger">El RFC no puede ir vacio.</h2>' );
             return false;
         }
-        var url = "php/routes.php?action=getClient&rfc=" + rfc;
+        var url = "php/routes.php?action=getClient&rfc=" + encodeURIComponent(rfc);
         var resp = ajaxR( url );//alert(resp);
         var costumer_json = JSON.parse( resp );
         if( ! costumer_json.was_found || costumer_json.was_found == 'no' ){
