@@ -9,7 +9,7 @@ var global_sale = null, global_costumer = null;
             show_alert( '<h2 class="text-center text-danger">El RFC no puede ir vacio.</h2>' );
             return false;
         }
-        var url = "php/routes.php?action=getClient&rfc=" + rfc;
+        var url = "php/routes.php?action=getClient&rfc=" + encodeURIComponent(rfc);
         var resp = ajaxR( url );//alert(resp);
         var costumer_json = JSON.parse( resp );
         if( ! costumer_json.was_found || costumer_json.was_found == 'no' ){
@@ -305,7 +305,7 @@ var global_sale = null, global_costumer = null;
                 alert( "El tipo de pago es requerido." );
                 return false;
             }
-            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=${costumer}&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
+            var url = `php/routes.php?action=sendBill&sale_folio=${sale}&sale_costumer=` + encodeURIComponent(costumer) + `&cfdi=${cfdi_use}&payment_type=${payment_type}&contact_id=${contact_id}`;
 //alert(url);
             var resp = ajaxR( url );
 //alert( resp );
@@ -370,9 +370,11 @@ var global_sale = null, global_costumer = null;
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
+        var spam_message = `<h3 class="text-center icon-attention-alt">Si el corre no esta en bandeja principal revisar banjeda de correos no deseados o SPAM</h3>`;
         show_alert( `<h3 class="text-center"></h3>
             <div class="text-center">
                 <h2 class="${color_class}">${email_json.message}</h2>
+                ${spam_message}
                 <div class="text-center">
                     <button
                         type="button"
@@ -459,7 +461,6 @@ var global_sale = null, global_costumer = null;
                 </button>
             </div>
             <div class="col-12">
-            <p class="text-center text-danger">NOTA : POR EL MOMENTO NO SE PUEDEN ENVIAR CORREOS A GMAIL</p>
                 <h4>Escribe aqui el correo destino (opcional)</h4>
                 <input type="email" id="custom_email" class="form-control" placeholder="Escribe aqui el correo destino (opcional)">
                 <br>

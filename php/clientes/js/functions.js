@@ -379,7 +379,7 @@
 			$( '#rfc_seeker' ).focus();
 			return false;
 		}
-		var url = "ajax/db.php?costumer_fl=seek_by_rfc&rfc=" + rfc;
+		var url = "ajax/db.php?costumer_fl=seek_by_rfc&rfc=" + encodeURIComponent(rfc);
 		var resp = ajaxR( url ).split( "|" );
 //alert(resp);
 		$( '#accordion' ).html( '' );
