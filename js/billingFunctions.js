@@ -370,7 +370,7 @@ var global_sale = null, global_costumer = null;
         var resp = ajaxR( url );//alert(resp);
         var email_json = JSON.parse( resp );
         var color_class = ( email_json.status == 400 ? "text-danger" : "text-success" );
-        var spam_message = `<h3 class="text-center icon-attention-alt">Si el corre no esta en bandeja principal revisar banjeda de correos no deseados o SPAM</h3>`;
+        var spam_message = `<h3 class="text-center icon-attention-alt">Si el correo no esta en bandeja principal revisar banjeda de correos no deseados o SPAM</h3>`;
         show_alert( `<h3 class="text-center"></h3>
             <div class="text-center">
                 <h2 class="${color_class}">${email_json.message}</h2>
